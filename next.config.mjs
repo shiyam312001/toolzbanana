@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // Using default config; the Turbopack root warning is safe to ignore for development.
 };
 
 export default nextConfig;
