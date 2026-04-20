@@ -77,10 +77,7 @@ export function OmniPdfTool({ slug, tool, engine }) {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (!files.length) {
-      setItems(DEMO_ITEMS);
-      return;
-    }
+    if (!files.length) return;
     let cancelled = false;
     (async () => {
       const next = [];
@@ -117,7 +114,7 @@ export function OmniPdfTool({ slug, tool, engine }) {
       ? `${(totals.bytes / (1024 * 1024)).toFixed(2)} MB`
       : "—";
 
-  const addFiles = async (fileList) => {
+  const addFiles = useCallback(async (fileList) => {
     const arr = Array.from(fileList || []).filter((f) =>
       slug === "image-to-pdf" ? f.type.startsWith("image/") : f.type.includes("pdf"),
     );
@@ -134,7 +131,7 @@ export function OmniPdfTool({ slug, tool, engine }) {
       if (!prev.length) return next;
       return [...prev, ...next];
     });
-  };
+  }, [setFiles, slug]);
 
   const removeAt = (id) => {
     setFiles((prev) => {
@@ -151,7 +148,7 @@ export function OmniPdfTool({ slug, tool, engine }) {
       e.preventDefault();
       addFiles(e.dataTransfer.files);
     },
-    [slug],
+    [addFiles],
   );
 
   const openPicker = () => inputRef.current?.click();

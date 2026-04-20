@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { ImageToolShell } from "./ImageTool";
 
 const DEMO_PREVIEW =
@@ -30,18 +30,23 @@ export function OmniImageTool({ slug, tool, engine }) {
     isLoading,
   } = engine;
 
-  const [previewUrl, setPreviewUrl] = useState(DEMO_PREVIEW);
+  const previewUrl = useMemo(() => {
+    const f = files[0];
+    if (!f) return DEMO_PREVIEW;
+    return URL.createObjectURL(f);
+  }, [files]);
 
   useEffect(() => {
     const f = files[0];
-    if (!f) {
-      setPreviewUrl(DEMO_PREVIEW);
-      return;
-    }
-    const url = URL.createObjectURL(f);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [files]);
+    if (!f) return;
+    return () => {
+      try {
+        URL.revokeObjectURL(previewUrl);
+      } catch {
+        // ignore
+      }
+    };
+  }, [files, previewUrl]);
 
   function onPickFile(f) {
     if (!f || !f.type.startsWith("image/")) return;

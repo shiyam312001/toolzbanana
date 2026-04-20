@@ -187,7 +187,7 @@ export function CodeToolShell({
         </div>
       </header>
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 min-h-0 lg:min-h-[420px] auto-rows-fr">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 min-h-0 lg:min-h-[690px] auto-rows-fr">
         <section className="flex flex-col rounded-lg bg-surface-container-low overflow-hidden ring-1 ring-outline-variant/15 min-h-[260px] lg:min-h-0">
           <div className="flex items-center justify-between px-6 py-4 bg-surface-container-high/50">
             <div className="flex items-center gap-2">
