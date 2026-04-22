@@ -1,6 +1,8 @@
 import "./globals.css";
+import "../components/styles/theme.css";
 import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
-import { Navbar } from "../components/site/navbar";
+import { Navbar } from "../components/site/navbar.tsx";
+import { Footer } from "../components/components/layout/Footer";
 
 const SITE_URL = "https://toolzbanana.com";
 
@@ -58,6 +60,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                try {
+                  document.documentElement.classList.remove("dark");
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         {/* Material Symbols for all omni tool icons */}
         <link
           rel="stylesheet"
@@ -77,6 +90,7 @@ export default function RootLayout({ children }) {
         <div id="content" className="min-h-screen">
           {children}
         </div>
+        <Footer />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

@@ -34,30 +34,6 @@ async function fileToEntry(file, idx) {
   };
 }
 
-const DEMO_ITEMS = [
-  {
-    id: "demo-1",
-    name: "Annual_Report_2023.pdf",
-    pages: "42 Pages",
-    sizeLabel: "2.4 MB",
-    file: null,
-  },
-  {
-    id: "demo-2",
-    name: "Financial_Summary_Q4.pdf",
-    pages: "12 Pages",
-    sizeLabel: "850 KB",
-    file: null,
-  },
-  {
-    id: "demo-3",
-    name: "Compliance_Notes_v2.pdf",
-    pages: "5 Pages",
-    sizeLabel: "1.1 MB",
-    file: null,
-  },
-];
-
 /** @param {{ slug: string; tool: { title: string; description: string }; engine: import("../use-tool-client-engine").ToolClientEngine }} props */
 export function OmniPdfTool({ slug, tool, engine }) {
   const {
@@ -72,8 +48,8 @@ export function OmniPdfTool({ slug, tool, engine }) {
     isLoading,
   } = engine;
 
-  const [items, setItems] = useState(DEMO_ITEMS);
-  const [outName, setOutName] = useState("Merged_Documents_2023.pdf");
+  const [items, setItems] = useState([]);
+  const [outName, setOutName] = useState("Merged_Document.pdf");
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -91,28 +67,20 @@ export function OmniPdfTool({ slug, tool, engine }) {
     };
   }, [files]);
 
-  const hasReal = items.some((row) => row.file);
-  const allDemo = items.length > 0 && !hasReal;
+  const totals = items.reduce(
+    (acc, row) => {
+      if (!row.file) return acc;
+      acc.count += 1;
+      const n = parseInt(String(row.pages).replace(/\D/g, ""), 10);
+      if (!Number.isNaN(n)) acc.pages += n;
+      acc.bytes += row.file.size;
+      return acc;
+    },
+    { count: 0, pages: 0, bytes: 0 },
+  );
 
-  const totals = allDemo
-    ? { count: 3, pages: 59, bytes: 4.35 * 1024 * 1024 }
-    : items.reduce(
-        (acc, row) => {
-          if (!row.file) return acc;
-          acc.count += 1;
-          const n = parseInt(String(row.pages).replace(/\D/g, ""), 10);
-          if (!Number.isNaN(n)) acc.pages += n;
-          acc.bytes += row.file.size;
-          return acc;
-        },
-        { count: 0, pages: 0, bytes: 0 },
-      );
-
-  const sizeEstimate = allDemo
-    ? "4.35 MB"
-    : totals.bytes > 0
-      ? `${(totals.bytes / (1024 * 1024)).toFixed(2)} MB`
-      : "—";
+  const sizeEstimate =
+    totals.bytes > 0 ? `${(totals.bytes / (1024 * 1024)).toFixed(2)} MB` : "—";
 
   const addFiles = useCallback(async (fileList) => {
     const arr = Array.from(fileList || []).filter((f) =>
@@ -352,13 +320,13 @@ export function OmniPdfTool({ slug, tool, engine }) {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Total Files</span>
                   <span className="text-sm font-bold">
-                    {allDemo ? 3 : totals.count}
+                    {totals.count}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Total Pages</span>
                   <span className="text-sm font-bold">
-                    {allDemo ? 59 : totals.pages || "—"}
+                    {totals.pages || "—"}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">

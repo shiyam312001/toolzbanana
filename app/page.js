@@ -1,4 +1,4 @@
-import { HomePage } from "../components/home/home-page";
+import { Home as HomePage } from "../components/pages/Home";
 
 const SITE_URL = "https://toolzbanana.com";
 

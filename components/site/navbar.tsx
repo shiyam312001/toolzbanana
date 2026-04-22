@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Menu, Moon, Search, X } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
@@ -18,9 +18,14 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    // Keep whole UI in light mode.
+    document.documentElement.classList.remove("dark");
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -28,6 +33,13 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const runSearch = (raw: string) => {
+    const q = String(raw || "").trim();
+    if (!q) return;
+    router.push(`/tools?search=${encodeURIComponent(q)}`);
+    setMobileOpen(false);
+  };
 
   return (
     <header
@@ -48,7 +60,7 @@ export function Navbar() {
       <div className="ds-container">
         <div style={{ display: "flex", alignItems: "center", height: 56, gap: 8 }}>
 
-          {/* ① Logo — desktop only */}
+          {/* ① Logo — desktop */}
           <Link
             href="/"
             className="navbar-desktop-only"
@@ -67,12 +79,35 @@ export function Navbar() {
             </span>
           </Link>
 
+          {/* ① Logo — mobile */}
+          <Link
+            href="/"
+            className="navbar-mobile-only"
+            style={{
+              display: "none",
+              alignItems: "center",
+              gap: 8,
+              textDecoration: "none",
+              flexShrink: 0,
+              marginRight: "auto",
+            }}
+          >
+            <span style={{ fontSize: 22, lineHeight: 1 }} aria-hidden>🍌</span>
+            <span style={{ fontSize: 16, fontWeight: 800, color: "#f59e0b", letterSpacing: "-0.3px", whiteSpace: "nowrap" }}>
+              ToolzBanana
+            </span>
+          </Link>
+
           {/* ② Search — desktop only */}
-          <div
+          <form
             role="search"
             aria-label="Search tools"
             className="navbar-desktop-only"
-            style={{ position: "relative", width: 360, marginRight: 25,marginLeft: 15 }}
+            style={{ position: "relative", width: 360, marginRight: 25, marginLeft: 15 }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              runSearch(query);
+            }}
           >
             <Search
               aria-hidden
@@ -108,7 +143,7 @@ export function Navbar() {
                 e.currentTarget.style.backgroundColor = "#f9fafb";
               }}
             />
-          </div>
+          </form>
 
           {/* ③ Nav links — desktop only */}
           <nav
@@ -156,6 +191,9 @@ export function Navbar() {
             aria-label="Toggle theme"
             title="Toggle theme"
             className="navbar-desktop-only"
+            onClick={() => {
+              document.documentElement.classList.remove("dark");
+            }}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -239,7 +277,15 @@ export function Navbar() {
             style={{ borderTop: "1px solid #e5e7eb", padding: "16px 0" }}
             className="navbar-mobile-only"
           >
-            <div role="search" aria-label="Search tools" style={{ position: "relative", marginBottom: 12 }}>
+            <form
+              role="search"
+              aria-label="Search tools"
+              style={{ position: "relative", marginBottom: 12 }}
+              onSubmit={(e) => {
+                e.preventDefault();
+                runSearch(query);
+              }}
+            >
               <Search
                 aria-hidden
                 style={{
@@ -263,7 +309,7 @@ export function Navbar() {
                   outline: "none",
                 }}
               />
-            </div>
+            </form>
 
             <nav style={{ display: "flex", flexDirection: "column", gap: 2 }} aria-label="Mobile primary">
               {NAV_LINKS.map((item) => {
