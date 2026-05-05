@@ -43,15 +43,11 @@ export function HeroSection({ categories = [] }) {
             lineHeight: 1.15,
           }}
         >
-          Free Online Tools That
-          <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFC107] to-[#FF9800]">
-            Make Work Easy
-          </span>
+          Free Online Tools Without Login - PDF, Image &amp; SEO Tools | ToolzBanana
         </h1>
 
         <p className="text-gray-600 mb-8 max-w-2xl mx-auto text-[15px]">
-          Simplify your workflow with our comprehensive collection of free online tools. No signup required, completely free forever.
+          ToolzBanana is an all in one online tools website with fast and free productivity tools website access for everyone in India. Use powerful tools in seconds with no login and no signup.
         </p>
 
         <div className="mb-8 max-w-2xl mx-auto">

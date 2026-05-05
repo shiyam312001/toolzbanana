@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Menu, Moon, Search, X } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
@@ -18,7 +18,6 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -33,13 +32,6 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const runSearch = (raw: string) => {
-    const q = String(raw || "").trim();
-    if (!q) return;
-    router.push(`/tools?search=${encodeURIComponent(q)}`);
-    setMobileOpen(false);
-  };
 
   return (
     <header
@@ -99,15 +91,11 @@ export function Navbar() {
           </Link>
 
           {/* ② Search — desktop only */}
-          <form
+          <div
             role="search"
             aria-label="Search tools"
             className="navbar-desktop-only"
-            style={{ position: "relative", width: 360, marginRight: 25, marginLeft: 15 }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              runSearch(query);
-            }}
+            style={{ position: "relative", width: 360, marginRight: 25,marginLeft: 15 }}
           >
             <Search
               aria-hidden
@@ -143,7 +131,7 @@ export function Navbar() {
                 e.currentTarget.style.backgroundColor = "#f9fafb";
               }}
             />
-          </form>
+          </div>
 
           {/* ③ Nav links — desktop only */}
           <nav
@@ -277,15 +265,7 @@ export function Navbar() {
             style={{ borderTop: "1px solid #e5e7eb", padding: "16px 0" }}
             className="navbar-mobile-only"
           >
-            <form
-              role="search"
-              aria-label="Search tools"
-              style={{ position: "relative", marginBottom: 12 }}
-              onSubmit={(e) => {
-                e.preventDefault();
-                runSearch(query);
-              }}
-            >
+            <div role="search" aria-label="Search tools" style={{ position: "relative", marginBottom: 12 }}>
               <Search
                 aria-hidden
                 style={{
@@ -309,7 +289,7 @@ export function Navbar() {
                   outline: "none",
                 }}
               />
-            </form>
+            </div>
 
             <nav style={{ display: "flex", flexDirection: "column", gap: 2 }} aria-label="Mobile primary">
               {NAV_LINKS.map((item) => {

@@ -1,6 +1,7 @@
 import "./globals.css";
 import "../components/styles/theme.css";
 import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
+import Script from "next/script";
 import { Navbar } from "../components/site/navbar.tsx";
 import { Footer } from "../components/components/layout/Footer";
 
@@ -60,6 +61,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2466646777584490"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
