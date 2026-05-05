@@ -42,6 +42,11 @@ export const metadata = {
   twitter: {
     card: "summary",
   },
+
+  // ✅ AdSense Meta (BEST PRACTICE)
+  other: {
+    "google-adsense-account": "ca-pub-2466646777584490",
+  },
 };
 
 export const viewport = {
@@ -61,12 +66,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        {/* ✅ AdSense Script */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2466646777584490"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+
+        {/* Prevent dark mode flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -78,12 +86,14 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
-        {/* Material Symbols for all omni tool icons */}
+
+        {/* Material Icons */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&display=swap"
         />
       </head>
+
       <body
         className={`${instrumentSans.variable} ${bricolageGrotesque.variable} bg-background text-foreground antialiased`}
       >
@@ -93,11 +103,16 @@ export default function RootLayout({ children }) {
         >
           Skip to main content
         </a>
+
         <Navbar />
+
         <div id="content" className="min-h-screen">
           {children}
         </div>
+
         <Footer />
+
+        {/* ✅ Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
