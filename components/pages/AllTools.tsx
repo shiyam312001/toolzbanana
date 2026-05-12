@@ -35,6 +35,20 @@ export function AllTools() {
   }, [searchQuery]);
 
   useEffect(() => {
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
+    if (localSearch.trim()) {
+      params.set("search", localSearch.trim());
+    } else {
+      params.delete("search");
+    }
+    const next = params.toString();
+    const current = searchParams?.toString() ?? "";
+    if (next !== current) {
+      router.replace(next ? `/tools?${next}` : "/tools");
+    }
+  }, [localSearch, router, searchParams]);
+
+  useEffect(() => {
     setSelectedCategory(tabFromSearchParams(searchParams));
   }, [searchParams]);
 

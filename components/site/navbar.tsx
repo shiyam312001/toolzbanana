@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { Menu, Moon, Search, X } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState, type FormEvent } from "react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home", match: (p: string) => p === "/" },
@@ -22,9 +22,20 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const submitSearch = (event: FormEvent) => {
+    event.preventDefault();
+    const value = query.trim();
+    if (!value) return;
+    const params = new URLSearchParams();
+    params.set("search", value);
+    params.set("view", "all");
+    router.push(`/tools?${params.toString()}`);
+    setMobileOpen(false);
+  };
   useEffect(() => {
     // Keep whole UI in light mode.
     document.documentElement.classList.remove("dark");
@@ -53,7 +64,10 @@ export function Navbar() {
         transition: "box-shadow 0.2s ease",
       }}
     >
-      <div className="ds-container">
+      <div
+        className="ds-container"
+        style={mobileOpen ? { backgroundColor: "#ffffff" } : undefined}
+      >
         <div style={{ display: "flex", alignItems: "center", height: 56, gap: 8 }}>
 
           {/* ① Logo — desktop */}
@@ -95,11 +109,12 @@ export function Navbar() {
           </Link>
 
           {/* ② Search — desktop only */}
-          <div
+          <form
             role="search"
             aria-label="Search tools"
             className="navbar-desktop-only"
             style={{ position: "relative", width: 360, marginRight: 25,marginLeft: 15 }}
+            onSubmit={submitSearch}
           >
             <Search
               aria-hidden
@@ -135,7 +150,7 @@ export function Navbar() {
                 e.currentTarget.style.backgroundColor = "#f9fafb";
               }}
             />
-          </div>
+          </form>
 
           {/* ③ Nav links — desktop only */}
           <nav
@@ -253,10 +268,11 @@ export function Navbar() {
               height: 38,
               borderRadius: 999,
               border: "1px solid #e5e7eb",
-              backgroundColor: "transparent",
+              backgroundColor: mobileOpen ? "#f3f4f6" : "transparent",
               cursor: "pointer",
               color: "#374151",
               flexShrink: 0,
+              boxShadow: mobileOpen ? "0 0 0 2px rgba(245,158,11,0.15)" : "none",
             }}
           >
             {mobileOpen ? <X style={{ width: 18, height: 18 }} /> : <Menu style={{ width: 18, height: 18 }} />}
@@ -266,10 +282,13 @@ export function Navbar() {
         {/* Mobile drawer */}
         {mobileOpen && (
           <div
-            style={{ borderTop: "1px solid #e5e7eb", padding: "16px 0" }}
-            className="navbar-mobile-only"
+            style={{
+              borderTop: "1px solid #e5e7eb",
+              padding: "16px 0",
+            }}
+            className="navbar-mobile-block"
           >
-            <div role="search" aria-label="Search tools" style={{ position: "relative", marginBottom: 12 }}>
+            <form role="search" aria-label="Search tools" style={{ position: "relative", marginBottom: 12 }} onSubmit={submitSearch}>
               <Search
                 aria-hidden
                 style={{
@@ -284,7 +303,7 @@ export function Navbar() {
                 aria-label="Search tools"
                 style={{
                   width: "100%",
-                  padding: "9px 14px 9px 36px",
+                  padding: "9px 90px 9px 36px",
                   fontSize: 14,
                   border: "1px solid #e5e7eb",
                   borderRadius: 8,
@@ -293,7 +312,25 @@ export function Navbar() {
                   outline: "none",
                 }}
               />
-            </div>
+              <button
+                type="submit"
+                style={{
+                  position: "absolute",
+                  right: 6,
+                  top: 6,
+                  border: "none",
+                  borderRadius: 6,
+                  backgroundColor: "#f59e0b",
+                  color: "#fff",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  padding: "6px 10px",
+                  cursor: "pointer",
+                }}
+              >
+                Search
+              </button>
+            </form>
 
             <nav style={{ display: "flex", flexDirection: "column", gap: 2 }} aria-label="Mobile primary">
               {NAV_LINKS.map((item) => {
@@ -347,8 +384,10 @@ export function Navbar() {
           .navbar-desktop-only { display: flex !important; }
         }
         .navbar-mobile-only { display: none !important; }
+        .navbar-mobile-block { display: none !important; }
         @media (max-width: 767px) {
           .navbar-mobile-only { display: inline-flex !important; }
+          .navbar-mobile-block { display: block !important; }
         }
       `}</style>
     </header>

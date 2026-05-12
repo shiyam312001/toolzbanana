@@ -9,6 +9,64 @@ import { removeBackground } from "@imgly/background-removal";
 import { PDFDocument } from "pdf-lib";
 import jsPDF from "jspdf";
 
+const BG_REMOVER_MAX_DIMENSION = 1600;
+
+async function readImageDimensions(file: File): Promise<{ width: number; height: number }> {
+  const src = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    img.src = src;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("Failed to read image."));
+    });
+    return { width: img.width, height: img.height };
+  } finally {
+    URL.revokeObjectURL(src);
+  }
+}
+
+async function downscaleForBackgroundRemoval(file: File): Promise<{ blob: Blob; scaled: boolean }> {
+  const { width, height } = await readImageDimensions(file);
+  const longestSide = Math.max(width, height);
+  if (longestSide <= BG_REMOVER_MAX_DIMENSION) {
+    return { blob: file, scaled: false };
+  }
+
+  const ratio = BG_REMOVER_MAX_DIMENSION / longestSide;
+  const targetWidth = Math.max(1, Math.round(width * ratio));
+  const targetHeight = Math.max(1, Math.round(height * ratio));
+
+  const src = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    img.src = src;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("Failed to decode image."));
+    });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      throw new Error("Canvas is unavailable.");
+    }
+    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/png", 0.92),
+    );
+    if (!blob) {
+      throw new Error("Failed to prepare image.");
+    }
+    return { blob, scaled: true };
+  } finally {
+    URL.revokeObjectURL(src);
+  }
+}
+
 export function useToolClientEngine(slug: string) {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -336,9 +394,15 @@ export function useToolClientEngine(slug: string) {
             break;
           }
           const file = files[0];
-          const blob = await removeBackground(file);
+          const { blob: preparedBlob, scaled } = await downscaleForBackgroundRemoval(file);
+          const blob = await removeBackground(preparedBlob);
           setResultBlob(blob);
-          setOutput(`Background removed for ${file.name}\nOutput size: ${(blob.size / 1024).toFixed(1)} KB`);
+          const speedNote = scaled
+            ? `\nOptimized input to max ${BG_REMOVER_MAX_DIMENSION}px for faster processing.`
+            : "";
+          setOutput(
+            `Background removed for ${file.name}\nOutput size: ${(blob.size / 1024).toFixed(1)} KB${speedNote}`,
+          );
           break;
         }
         case "resize-image": {

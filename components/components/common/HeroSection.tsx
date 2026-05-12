@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import Link from "next/link";
 import { Sparkles, ArrowRight, Search } from 'lucide-react';
+import { useRouter } from "next/navigation";
 import { Button } from '../ui/Button';
 
 export function HeroSection({ categories = [] }) {
+  const router = useRouter();
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [query, setQuery] = useState('');
 
   const placeholders = [
     'Search any tool..."PDF Compressor"',
@@ -26,6 +29,16 @@ export function HeroSection({ categories = [] }) {
 
     return () => clearInterval(interval);
   }, []);
+
+  const submitSearch = (event: FormEvent) => {
+    event.preventDefault();
+    const value = query.trim();
+    if (!value) return;
+    const params = new URLSearchParams();
+    params.set("search", value);
+    params.set("view", "all");
+    router.push(`/tools?${params.toString()}`);
+  };
 
   return (
     <section className="bg-gradient-to-b from-orange-100 to-white py-20 px-4">
@@ -50,18 +63,21 @@ export function HeroSection({ categories = [] }) {
           ToolzBanana is an all in one online tools website with fast and free productivity tools website access for everyone in India. Use powerful tools in seconds with no login and no signup.
         </p>
 
-        <div className="mb-8 max-w-2xl mx-auto">
+        <form className="mb-8 max-w-2xl mx-auto" onSubmit={submitSearch}>
           <div className="flex items-center bg-white rounded-2xl shadow-lg shadow-[#FFC107]/10 border border-[#FFC107]/20 p-1.5">
             <div className="flex items-center flex-1 px-4">
               <Search className="w-5 h-5 text-[#999] mr-3 shrink-0" />
               <input
                 type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 placeholder={placeholders[placeholderIndex]}
                 className="bg-transparent border-none outline-none w-full text-[#111] placeholder-[#999] py-2"
                 style={{ fontSize: '1rem' }}
               />
             </div>
             <button
+              type="submit"
               className="bg-[#FFC107] text-[#111] px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:bg-[#FFD54F] transition-all shrink-0"
               style={{
                 fontSize: '0.9375rem',
@@ -71,7 +87,7 @@ export function HeroSection({ categories = [] }) {
               Search
             </button>
           </div>
-        </div>
+        </form>
 
         <div className="flex flex-wrap gap-2 justify-center">
           {categories.map((cat) => (

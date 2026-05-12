@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { AdBlock } from "../ui/AdBlock";
+import { AdBanner } from "../components/common";
 import { OmniSidebar } from "./OmniSidebar";
 
 /** Main canvas: fluid padding, safe areas, no horizontal overflow — all breakpoints */
 const OMNI_MAIN =
-  "omni-main-panel flex-1 flex flex-col min-h-0 min-w-0 w-full max-w-full " +
-  "overflow-x-hidden overflow-y-auto overscroll-y-contain " +
+  "omni-main-panel flex-1 flex flex-col min-w-0 w-full max-w-full " +
+  "overflow-x-hidden " +
   "px-3 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] " +
   "sm:px-5 sm:pt-5 sm:pb-6 " +
   "md:px-7 md:py-7 " +
@@ -74,7 +75,7 @@ export function ToolLayout({
   const toolPageBody = (
     <div className={pageWrapClass}>
       <div className="mb-5 sm:mb-6">
-        <AdBlock size="728x90" />
+        <AdBanner size="728x90" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_380px] gap-5 lg:gap-7 items-start">
         <section className="min-w-0">{children}</section>

@@ -135,15 +135,15 @@ export function ImageToolShell({
                       {quality}%
                     </span>
                   </div>
-                  <input
-                    id="omni-compress-range"
-                    className="w-full h-2 rounded-lg cursor-pointer accent-primary"
-                    max={100}
-                    min={0}
-                    type="range"
-                    value={quality}
-                    onChange={(e) => onQualityChange?.(Number(e.target.value))}
-                  />
+               <input
+  id="omni-compress-range"
+  className="w-full h-2 rounded-lg cursor-pointer !bg-[#fde68a] accent-primary"
+  max={100}
+  min={0}
+  type="range"
+  value={quality}
+  onChange={(e) => onQualityChange?.(Number(e.target.value))}
+/>
                   <div className="flex justify-between text-[0.75rem] text-on-surface-variant font-label">
                     <span>High Quality</span>
                     <span>Max Save</span>
