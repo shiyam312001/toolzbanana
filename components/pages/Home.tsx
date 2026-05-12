@@ -31,7 +31,7 @@ export function Home() {
       <FeaturesSection />
 
       <div className="px-4 py-8">
-        <AdBanner type="leaderboard" />
+        <AdBanner />
       </div>
 
       <CategoriesGrid
@@ -105,7 +105,7 @@ export function Home() {
       <HowItWorksSection />
 
       <div className="px-4 py-8">
-        <AdBanner type="leaderboard" />
+        <AdBanner />
       </div>
     </div>
   );

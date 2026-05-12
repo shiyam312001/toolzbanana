@@ -1,9 +1,10 @@
 import Link from "next/link";
 
-export function CategoryCard({ name, description, icon: Icon, toolCount, categoryId, color }) {
+export function CategoryCard({ name, description, icon: Icon, toolCount, categoryId, id, color }) {
+  const slug = categoryId ?? id;
   return (
     <Link
-      href={`/tools?category=${categoryId}`}
+      href={`/tools?category=${slug}`}
       className="group bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 p-6 hover:border-yellow-400 hover:shadow-xl transition-all duration-300"
     >
       <div className="flex flex-col items-center text-center">

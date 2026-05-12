@@ -10,9 +10,13 @@ const NAV_LINKS = [
   {
     href: "/tools",
     label: "All tools",
-    match: (p: string) => p === "/tools" || p.startsWith("/tools/"),
+    match: (p: string) => p.startsWith("/tools/"),
   },
-  { href: "/categories", label: "Categories", match: (p: string) => p === "/categories" },
+  {
+    href: "/categories",
+    label: "Categories",
+    match: (p: string) => p === "/categories" || p === "/tools",
+  },
   { href: "/about", label: "About", match: (p: string) => p === "/about" },
 ];
 

@@ -27,7 +27,7 @@ export function Categories() {
       <CategoriesGrid categories={categories} />
 
       <div className="px-4 py-8">
-        <AdBanner type="leaderboard" />
+        <AdBanner />
       </div>
     </div>
   );

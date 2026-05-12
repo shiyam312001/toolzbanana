@@ -57,7 +57,7 @@ export function ToolPage() {
             tool={{ title: tool.name, description: tool.description }}
           />
           <div className="mt-8">
-            <AdBanner type="rectangle" />
+            <AdBanner />
           </div>
         </div>
       </section>

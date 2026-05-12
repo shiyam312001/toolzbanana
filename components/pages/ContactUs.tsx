@@ -14,11 +14,40 @@ export function ContactUs() {
     subject: '',
     message: '',
   });
+  const [status, setStatus] = useState({ type: 'idle', message: '' });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setSubmitting(true);
+    setStatus({ type: 'idle', message: '' });
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setStatus({
+          type: 'error',
+          message: data.error || 'Something went wrong. Please try again.',
+        });
+        setSubmitting(false);
+        return;
+      }
+      setStatus({
+        type: 'success',
+        message: 'Thank you for your message. We will get back to you soon.',
+      });
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch {
+      setStatus({
+        type: 'error',
+        message: 'Could not reach the server. Check your connection and try again.',
+      });
+    }
+    setSubmitting(false);
   };
 
   const handleChange = (e) => {
@@ -81,6 +110,17 @@ export function ContactUs() {
               Send us a Message
             </h2>
 
+            {status.type === 'success' && (
+              <p className="mb-4 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+                {status.message}
+              </p>
+            )}
+            {status.type === 'error' && (
+              <p className="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                {status.message}
+              </p>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -93,6 +133,7 @@ export function ContactUs() {
                   onChange={handleChange}
                   placeholder="Your name"
                   required
+                  disabled={submitting}
                 />
               </div>
 
@@ -107,6 +148,7 @@ export function ContactUs() {
                   onChange={handleChange}
                   placeholder="your@email.com"
                   required
+                  disabled={submitting}
                 />
               </div>
 
@@ -121,6 +163,7 @@ export function ContactUs() {
                   onChange={handleChange}
                   placeholder="What is this about?"
                   required
+                  disabled={submitting}
                 />
               </div>
 
@@ -135,13 +178,14 @@ export function ContactUs() {
                   placeholder="Your message..."
                   rows={6}
                   required
-                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-900 placeholder-gray-500"
+                  disabled={submitting}
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-900 placeholder-gray-500 disabled:opacity-60"
                 />
               </div>
 
-              <Button type="submit" variant="primary" size="md">
+              <Button type="submit" variant="primary" size="md" disabled={submitting}>
                 <Send className="w-5 h-5" />
-                Send Message
+                {submitting ? 'Sending…' : 'Send Message'}
               </Button>
             </form>
           </Card>
