@@ -20,7 +20,7 @@ export default function BlogIndexPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <section className="bg-white border-b border-gray-200 py-16 px-4">
-        <div className="max-w-7xlmx-auto">
+        <div className="max-w-7xl ">
           <p className="text-sm font-semibold text-yellow-700 uppercase tracking-wide mb-2">
             Blog
           </p>
@@ -37,7 +37,7 @@ export default function BlogIndexPage() {
       </section>
 
       <section className="py-12 px-4">
-        <div className="max-w-7xlmx-auto space-y-6">
+        <div className="max-w-7xl  space-y-6">
           {BLOG_POSTS.map((post) => (
             <article
               key={post.slug}

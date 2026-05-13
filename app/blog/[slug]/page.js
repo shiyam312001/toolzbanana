@@ -43,7 +43,7 @@ export default async function BlogArticlePage({ params }) {
   return (
     <article className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xlmx-auto px-4 py-12">
+        <div className="max-w-7xl  px-4 py-12">
           <p className="text-sm text-gray-500 mb-2">
             <Link href="/blog" className="text-yellow-700 hover:underline">
               Blog
@@ -60,7 +60,7 @@ export default async function BlogArticlePage({ params }) {
         </div>
       </div>
 
-      <div className="max-w-7xlmx-auto px-4 py-12 prose prose-lg prose-gray max-w-none">
+      <div className="max-w-7xl  px-4 py-12 prose prose-lg prose-gray max-w-none">
         {post.sections.map((sec) => (
           <section key={sec.heading} className="mb-10">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{sec.heading}</h2>
@@ -73,7 +73,7 @@ export default async function BlogArticlePage({ params }) {
         ))}
       </div>
 
-      <div className="max-w-7xlmx-auto px-4 pb-16">
+      <div className="max-w-7xl  px-4 pb-16">
         <Link
           href="/blog"
           className="inline-flex text-yellow-700 font-medium hover:underline"
