@@ -13,6 +13,14 @@ export const metadata = {
       "Editorial guides on browser-based tools, privacy-minded workflows, and developer utilities.",
     url: `${SITE_URL}/blog`,
     type: "website",
+    images: [{ url: `${SITE_URL}/file.svg`, width: 1200, height: 630, alt: "ToolzBanana blog" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Articles & guides · ToolzBanana",
+    description:
+      "Editorial guides on browser-based tools, privacy-minded workflows, and developer utilities.",
+    images: [`${SITE_URL}/file.svg`],
   },
 };
 

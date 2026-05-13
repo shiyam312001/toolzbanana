@@ -67,6 +67,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/terms-and-conditions" className="text-gray-600 hover:text-yellow-600 transition-colors">
+                  Terms and Conditions
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact-us" className="text-gray-600 hover:text-yellow-600 transition-colors">
                   Contact Us
                 </Link>

@@ -58,7 +58,7 @@ export function TermsOfService() {
               discarded.
             </p>
             <p>
-              The only persistent local storage we use is your browser's <code>localStorage</code>
+              The only persistent local storage we use is your browser&apos;s <code>localStorage</code>
               — for example, to remember recently used tools — and this data remains solely on
               your own device. We have no server-side copy of it.
             </p>
@@ -80,7 +80,7 @@ export function TermsOfService() {
               <li>Attempt to reverse-engineer, decompile, or extract source code from any
                 proprietary components of the site.</li>
               <li>Use the site in any way that could damage, overburden, or impair its
-                infrastructure or interfere with other users' access.</li>
+                infrastructure or interfere with other users&apos; access.</li>
             </ul>
 
             <h2>4. Acceptable Use</h2>
@@ -92,7 +92,7 @@ export function TermsOfService() {
               <li>Upload, process, or transmit content that is illegal, harmful, threatening,
                 defamatory, obscene, or otherwise objectionable.</li>
               <li>Use the tools to process data belonging to others without appropriate authorisation.</li>
-              <li>Attempt to gain unauthorised access to any part of the site's infrastructure.</li>
+              <li>Attempt to gain unauthorised access to any part of the site&apos;s infrastructure.</li>
               <li>Introduce malware, viruses, or any other malicious code.</li>
             </ul>
             <p>
@@ -102,8 +102,8 @@ export function TermsOfService() {
 
             <h2>5. Disclaimer of Warranties</h2>
             <p>
-              All tools and content on ToolzBanana are provided <strong>"as is"</strong> and
-              <strong> "as available"</strong> without any warranty of any kind, express or implied.
+              All tools and content on ToolzBanana are provided <strong>&quot;as is&quot;</strong> and
+              <strong> &quot;as available&quot;</strong> without any warranty of any kind, express or implied.
               To the fullest extent permitted by applicable law, ToolzBanana expressly disclaims
               all warranties, including but not limited to:
             </p>
@@ -156,8 +156,8 @@ export function TermsOfService() {
               ToolzBanana.
             </p>
             <p>
-              Additionally, advertising on this site is served by Google AdSense. Google's
-              advertising technologies operate under Google's own terms of service and privacy
+              Additionally, advertising on this site is served by Google AdSense. Google&apos;s
+              advertising technologies operate under Google&apos;s own terms of service and privacy
               policy. ToolzBanana does not control which ads are displayed and is not responsible
               for the content of those advertisements.
             </p>

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Search } from 'lucide-react';
 import { SEO } from '../components/common/SEO';
 import { ToolCard } from '../components/common/ToolCard';
@@ -212,6 +213,22 @@ export function AllTools() {
             beneath the interactive workspace. That content is written for humans
             first and explains privacy boundaries, common pitfalls, and suggested
             workflows—so you are never looking at a bare widget without context.
+          </p>
+          <h3 className="text-xl font-bold text-gray-900 pt-2">Focused tool hubs</h3>
+          <p>
+            Prefer a narrower starting point? Open the{" "}
+            <Link href="/tools/code" className="text-yellow-700 font-semibold hover:underline">
+              code and data workspace
+            </Link>
+            , jump to{" "}
+            <Link href="/tools/image" className="text-yellow-700 font-semibold hover:underline">
+              image editing and conversion tools
+            </Link>
+            , or go straight to{" "}
+            <Link href="/tools/pdf" className="text-yellow-700 font-semibold hover:underline">
+              PDF merge, split, and export workflows
+            </Link>
+            .
           </p>
         </div>
       </section>

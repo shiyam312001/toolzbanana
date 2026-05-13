@@ -85,6 +85,7 @@ export function ContactUs() {
       <section className="py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <h2 className="sr-only">Support channels and response expectations</h2>
             <Card hover>
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-yellow-50 rounded-lg">
@@ -130,10 +131,11 @@ export function ContactUs() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-2">
                   Name
                 </label>
                 <Input
+                  id="contact-name"
                   type="text"
                   name="name"
                   value={formData.name}
@@ -145,10 +147,11 @@ export function ContactUs() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 mb-2">
                   Email
                 </label>
                 <Input
+                  id="contact-email"
                   type="email"
                   name="email"
                   value={formData.email}
@@ -160,10 +163,11 @@ export function ContactUs() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="contact-subject" className="block text-sm font-medium text-gray-700 mb-2">
                   Subject
                 </label>
                 <Input
+                  id="contact-subject"
                   type="text"
                   name="subject"
                   value={formData.subject}
@@ -175,10 +179,11 @@ export function ContactUs() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-2">
                   Message
                 </label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}

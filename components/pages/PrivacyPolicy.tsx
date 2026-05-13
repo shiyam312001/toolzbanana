@@ -63,7 +63,7 @@ export function PrivacyPolicy() {
 
             <h2>3. Local Storage — Stays on Your Device</h2>
             <p>
-              To improve your experience, ToolzBanana uses your browser's <code>localStorage</code>
+              To improve your experience, ToolzBanana uses your browser&apos;s <code>localStorage</code>
               to remember things like your recently used tools or UI preferences (for example, a
               preferred theme or unit setting). This storage mechanism is:
             </p>
@@ -71,7 +71,7 @@ export function PrivacyPolicy() {
               <li><strong>Entirely local</strong> — the data never leaves your device.</li>
               <li><strong>Never synced</strong> to our servers, because there is no account to sync to.</li>
               <li><strong>Fully under your control</strong> — you can clear it at any time via your
-                browser's settings or developer tools (Application → Local Storage → Clear).</li>
+                browser&apos;s settings or developer tools (Application → Local Storage → Clear).</li>
             </ul>
             <p>
               We do not use server-side sessions, databases, or any mechanism that associates
@@ -86,10 +86,10 @@ export function PrivacyPolicy() {
             <p>
               However, third-party advertising partners — including Google AdSense — may set
               their own cookies or use advertising identifiers on pages where ads are displayed.
-              These are governed by the respective third parties' own privacy policies, not ours.
-              You can learn more about how Google uses data at Google's partner policy documentation,
+              These are governed by the respective third parties&apos; own privacy policies, not ours.
+              You can learn more about how Google uses data at Google&apos;s partner policy documentation,
               and use industry opt-out tools where available in your region (such as the NAI
-              opt-out tool or the EU's Your Online Choices).
+              opt-out tool or the EU&apos;s Your Online Choices).
             </p>
 
             <h2>5. Advertising — Google AdSense</h2>
@@ -101,7 +101,7 @@ export function PrivacyPolicy() {
 
             <h3>5a. Where Ads Appear</h3>
             <p>
-              We follow Google AdSense's programme policies and only place ad units on pages
+              We follow Google AdSense&apos;s programme policies and only place ad units on pages
               that contain <strong>meaningful, substantive publisher content</strong>. This includes:
             </p>
             <ul>
@@ -119,7 +119,7 @@ export function PrivacyPolicy() {
             <h3>5b. How Google Serves Ads</h3>
             <p>
               Google AdSense uses cookies, web beacons, and similar tracking technologies to serve
-              ads that are relevant to your interests. Google's advertising system may use:
+              ads that are relevant to your interests. Google&apos;s advertising system may use:
             </p>
             <ul>
               <li><strong>Interest-based advertising</strong> — ads tailored to browsing behaviour
@@ -129,7 +129,7 @@ export function PrivacyPolicy() {
               <li><strong>Demographic inference</strong> — estimated age and gender brackets based
                 on your Google account (if you are signed in) or browsing signals.</li>
               <li><strong>Remarketing</strong> — ads that may follow you to other websites after
-                visiting ToolzBanana, if Google's remarketing features are active.</li>
+                visiting ToolzBanana, if Google&apos;s remarketing features are active.</li>
             </ul>
             <p>
               ToolzBanana does not control which specific ads Google serves, and we do not receive
@@ -143,7 +143,7 @@ export function PrivacyPolicy() {
               You have several options to manage or opt out of personalised advertising:
             </p>
             <ul>
-              <li>Visit <strong>Google's Ads Settings</strong> (adssettings.google.com) to review and
+              <li>Visit <strong>Google&apos;s Ads Settings</strong> (adssettings.google.com) to review and
                 adjust how Google personalises ads for your account or browser.</li>
               <li>Use the <strong>NAI (Network Advertising Initiative) opt-out tool</strong> at
                 optout.networkadvertising.org to opt out of interest-based advertising from
@@ -171,7 +171,7 @@ export function PrivacyPolicy() {
               you are finished.
             </p>
 
-            <h2>7. Children's Privacy</h2>
+            <h2>7. Children&apos;s Privacy</h2>
             <p>
               ToolzBanana is intended for a general professional and consumer audience. We do not
               knowingly collect personal information from children under the age at which parental

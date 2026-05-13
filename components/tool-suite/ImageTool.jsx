@@ -53,9 +53,9 @@ export function ImageToolShell({
   return (
     <div className="w-full max-w-2xl flex flex-col items-center space-y-12 pb-8 md:pb-12">
       <div className="text-center space-y-4">
-        <h1 className="font-headline text-[2.75rem] font-extrabold tracking-tight text-on-surface leading-tight">
+        <h2 className="font-headline text-[2.75rem] font-extrabold tracking-tight text-on-surface leading-tight">
           {title}
-        </h1>
+        </h2>
         <p className="text-on-surface-variant text-lg max-w-md mx-auto">{description}</p>
       </div>
 
@@ -115,6 +115,10 @@ export function ImageToolShell({
                 className="w-full h-full object-cover"
                 alt="Compression preview"
                 src={previewUrl}
+                loading="lazy"
+                decoding="async"
+                width="1280"
+                height="720"
               />
               <div className="absolute inset-0 bg-black/5 pointer-events-none" />
             </div>

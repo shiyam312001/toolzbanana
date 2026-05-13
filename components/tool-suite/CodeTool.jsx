@@ -162,9 +162,9 @@ export function CodeToolShell({
               {eyebrowLabel}
             </span>
           </div>
-          <h1 className="text-[2rem] sm:text-[2.75rem] font-extrabold tracking-tight font-headline text-on-surface leading-tight">
+          <h2 className="text-[2rem] sm:text-[2.75rem] font-extrabold tracking-tight font-headline text-on-surface leading-tight">
             {title}
-          </h1>
+          </h2>
           <p className="text-on-surface-variant max-w-lg mt-2 font-body text-sm sm:text-base">
             {description}
           </p>

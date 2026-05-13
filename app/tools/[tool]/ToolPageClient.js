@@ -115,6 +115,7 @@ export default function ToolPageClient({ rawSegment }) {
         activeHubKey={activeHubKey}
         sidebarHeader={getSidebarHeader(variant)}
       >
+        <h1 className="sr-only">{tool.title}</h1>
         <ToolClient layout="omni" slug={slug} tool={tool} />
       </ToolLayout>
     );

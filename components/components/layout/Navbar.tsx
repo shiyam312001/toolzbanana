@@ -22,7 +22,6 @@ export function Navbar() {
 
   useEffect(() => {
     // Always start in light mode on initial page load.
-    setIsDark(false);
     document.documentElement.classList.remove("dark");
     window.localStorage.setItem(THEME_KEY, "light");
 

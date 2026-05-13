@@ -22,6 +22,8 @@ const bricolageGrotesque = Bricolage_Grotesque({
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
+  applicationName: "ToolzBanana",
+  category: "Developer Tools",
 
   title: {
     default: "ToolzBanana – Free Online Developer & Media Tools",
@@ -57,7 +59,7 @@ export const metadata = {
   },
 
   verification: {
-    google: "G-MDP4MC0YV1",
+    google: "google5263b811992ed9ce",
   },
 
   robots: {
@@ -93,6 +95,8 @@ export const metadata = {
 
   twitter: {
     card: "summary_large_image",
+    site: "@toolzbanana",
+    creator: "@toolzbanana",
     title: "ToolzBanana – Free Online Developer & Media Tools",
     description:
       "Free online tools for developers and creators including JSON formatter, JWT decoder, PDF tools, image tools, and SEO utilities.",
@@ -111,16 +115,35 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
-  const structuredData = {
+  const websiteStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "ToolzBanana",
     url: SITE_URL,
+    inLanguage: "en",
+    publisher: {
+      "@type": "Organization",
+      name: "ToolzBanana",
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/file.svg`,
+      },
+    },
     potentialAction: {
       "@type": "SearchAction",
-      target: `${SITE_URL}/search?q={search_term_string}`,
+      target: `${SITE_URL}/tools?search={search_term_string}&view=all`,
       "query-input": "required name=search_term_string",
     },
+  };
+
+  const organizationStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "ToolzBanana",
+    url: SITE_URL,
+    logo: `${SITE_URL}/file.svg`,
+    sameAs: [SITE_URL],
   };
 
   return (
@@ -131,7 +154,7 @@ export default function RootLayout({ children }) {
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2466646777584490"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
 
         {/* Google Analytics */}
@@ -162,11 +185,8 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* Material Icons */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&display=swap"
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </head>
 
       <body
@@ -191,7 +211,13 @@ export default function RootLayout({ children }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
+            __html: JSON.stringify(websiteStructuredData),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationStructuredData),
           }}
         />
       </body>

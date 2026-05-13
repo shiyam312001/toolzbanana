@@ -3,6 +3,7 @@
 import { SEO } from '../components/common/SEO';
 import { Card } from '../components/ui/Card';
 import { Zap, Shield, Heart, Users } from 'lucide-react';
+import Link from "next/link";
 
 export function About() {
   return (
@@ -49,6 +50,23 @@ export function About() {
               policies. We avoid placing ads on sparse or purely navigational screens
               so the experience stays focused when you are trying to recover from a
               broken link or find the right utility quickly.
+            </p>
+
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Explore core sections</h2>
+            <p className="text-gray-600 text-lg leading-relaxed mb-10">
+              If you are new here, start with our{" "}
+              <Link href="/tools" className="text-yellow-700 font-semibold hover:underline">
+                complete tools directory
+              </Link>{" "}
+              for direct access, use{" "}
+              <Link href="/categories" className="text-yellow-700 font-semibold hover:underline">
+                category collections
+              </Link>{" "}
+              for discovery, or read{" "}
+              <Link href="/blog" className="text-yellow-700 font-semibold hover:underline">
+                editorial guides
+              </Link>{" "}
+              to understand privacy and workflow trade-offs before processing sensitive inputs.
             </p>
           </div>
 

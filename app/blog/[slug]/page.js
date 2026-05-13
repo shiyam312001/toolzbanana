@@ -39,6 +39,21 @@ export default async function BlogArticlePage({ params }) {
   const slug = typeof p?.slug === "string" ? p.slug : "";
   const post = getBlogPost(slug);
   if (!post) notFound();
+  const articleStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: "ToolzBanana" },
+    publisher: {
+      "@type": "Organization",
+      name: "ToolzBanana",
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/file.svg` },
+    },
+    mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
+  };
 
   return (
     <article className="min-h-screen bg-gray-50">
@@ -81,6 +96,10 @@ export default async function BlogArticlePage({ params }) {
           ← All articles
         </Link>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleStructuredData) }}
+      />
     </article>
   );
 }

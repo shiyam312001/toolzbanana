@@ -4,27 +4,27 @@ import { Sparkles, ArrowRight, Search } from 'lucide-react';
 import { useRouter } from "next/navigation";
 import { Button } from '../ui/Button';
 
+const PLACEHOLDERS = [
+  'Search any tool..."PDF Compressor"',
+  'Search any tool..."Image Resizer"',
+  'Search any tool..."JSON Formatter"',
+  'Search any tool..."QR Code Generator"',
+  'Search any tool..."Password Generator"',
+  'Search any tool..."Background Remover"',
+  'Search any tool..."Word Counter"',
+  'Search any tool..."Base64 Encoder"',
+  'Search any tool..."Hash Generator"',
+  'Search any tool..."URL Encoder"',
+];
+
 export function HeroSection({ categories = [] }) {
   const router = useRouter();
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [query, setQuery] = useState('');
 
-  const placeholders = [
-    'Search any tool..."PDF Compressor"',
-    'Search any tool..."Image Resizer"',
-    'Search any tool..."JSON Formatter"',
-    'Search any tool..."QR Code Generator"',
-    'Search any tool..."Password Generator"',
-    'Search any tool..."Background Remover"',
-    'Search any tool..."Word Counter"',
-    'Search any tool..."Base64 Encoder"',
-    'Search any tool..."Hash Generator"',
-    'Search any tool..."URL Encoder"',
-  ];
-
   useEffect(() => {
     const interval = setInterval(() => {
-      setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+      setPlaceholderIndex((prev) => (prev + 1) % PLACEHOLDERS.length);
     }, 2000);
 
     return () => clearInterval(interval);
@@ -71,7 +71,7 @@ export function HeroSection({ categories = [] }) {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder={placeholders[placeholderIndex]}
+                placeholder={PLACEHOLDERS[placeholderIndex]}
                 className="bg-transparent border-none outline-none w-full text-[#111] placeholder-[#999] py-2"
                 style={{ fontSize: '1rem' }}
               />
