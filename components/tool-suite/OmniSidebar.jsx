@@ -1,6 +1,5 @@
 "use client";
 
-import { AdBlock } from "../ui/AdBlock";
 import { TOOL_META } from "../tools/tool-meta";
 import { AdBanner } from "../components/common";
 

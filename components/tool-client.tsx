@@ -1,6 +1,7 @@
 "use client";
 
 import { ToolShell } from "./tool-shell";
+import { ToolEditorialSection } from "./tools/ToolEditorialSection";
 import { OmniToolDispatcher } from "./tool-suite/OmniToolDispatcher";
 import { useToolClientEngine } from "./use-tool-client-engine";
 
@@ -914,6 +915,7 @@ export function ToolClient({
      Render
   ──────────────────────────────────────────── */
   return (
+    <>
     <ToolShell
       title={tool.title}
       description={tool.description}
@@ -1305,5 +1307,7 @@ export function ToolClient({
         )}
       </div>
     </ToolShell>
+      <ToolEditorialSection slug={slug} variant="legacy" />
+    </>
   );
 }

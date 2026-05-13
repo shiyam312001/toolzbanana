@@ -4,9 +4,9 @@ import {
   isToolHubSegment,
   resolveToolPageSlug,
 } from "../../../components/tools/tool-meta";
+import { getToolEditorialSummary } from "../../../components/tools/tool-editorial";
 import ToolPageClient from "./ToolPageClient";
-
-const SITE_URL = "https://toolzbanana.com";
+import { SITE_URL } from "../../../lib/site-config";
 
 const HUB_METADATA = {
   "Code & Data": {
@@ -32,14 +32,18 @@ export async function generateMetadata({ params }) {
     const cat = getHubCategoryFromSegment(normalized);
     const meta = cat ? HUB_METADATA[cat] : null;
     if (meta) {
+      const url = `${SITE_URL}/tools/${normalized}`;
       return {
         title: meta.title,
         description: meta.description,
         alternates: {
-          canonical: `${SITE_URL}/tools/${normalized}`,
+          canonical: url,
         },
         openGraph: {
-          url: `${SITE_URL}/tools/${normalized}`,
+          title: `${meta.title} · ToolzBanana`,
+          description: meta.description,
+          url,
+          type: "website",
         },
         twitter: {
           title: `${meta.title} · ToolzBanana`,
@@ -59,10 +63,12 @@ export async function generateMetadata({ params }) {
       description: "This tool is not available on ToolzBanana.",
       robots: { index: false, follow: false },
       alternates: {
-        canonical: `${SITE_URL}/tools/${String(rawSlug ?? "")}`,
+        canonical: `${SITE_URL}/tools`,
       },
       openGraph: {
-        url: `${SITE_URL}/tools/${String(rawSlug ?? "")}`,
+        title: "Tool not available · ToolzBanana",
+        description: "This tool is not available on ToolzBanana.",
+        url: `${SITE_URL}/tools`,
       },
       twitter: {
         title: "Tool not available · ToolzBanana",
@@ -71,18 +77,27 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  const summary = getToolEditorialSummary(safeSlug);
+  const description = summary
+    ? `${knownTool.description} ${summary}`.replace(/\s+/g, " ").trim().slice(0, 320)
+    : knownTool.description;
+  const canonical = `${SITE_URL}/tools/${safeSlug}`;
+
   return {
     title: knownTool.title,
-    description: knownTool.description,
+    description,
     alternates: {
-      canonical: `${SITE_URL}/tools/${safeSlug}`,
+      canonical,
     },
     openGraph: {
-      url: `${SITE_URL}/tools/${safeSlug}`,
+      title: `${knownTool.title} · ToolzBanana`,
+      description,
+      url: canonical,
+      type: "website",
     },
     twitter: {
       title: `${knownTool.title} · ToolzBanana`,
-      description: knownTool.description,
+      description,
     },
   };
 }

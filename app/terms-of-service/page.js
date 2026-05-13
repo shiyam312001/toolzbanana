@@ -1,6 +1,5 @@
 import { TermsOfService } from "../../components/pages/TermsOfService";
-
-const SITE_URL = "https://toolzbanana.com";
+import { SITE_URL } from "../../lib/site-config";
 
 export const metadata = {
   title: "Terms of Service",

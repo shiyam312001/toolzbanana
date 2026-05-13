@@ -4,8 +4,7 @@ import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import Script from "next/script";
 import { Navbar } from "../components/site/navbar.tsx";
 import { Footer } from "../components/components/layout/Footer";
-
-const SITE_URL = "https://toolzbanana.com";
+import { SITE_URL } from "../lib/site-config";
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -38,9 +37,21 @@ export const metadata = {
     url: SITE_URL,
     siteName: "ToolzBanana",
     locale: "en_US",
+    title: "ToolzBanana – Developer & Media Utility Hub",
+    description:
+      "Free, fast utilities for developers and creators: JSON formatter, JWT decoder, PDF tools, image utilities, and more in a single interface.",
+    images: [
+      {
+        url: "/file.svg",
+        alt: "ToolzBanana",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
+    title: "ToolzBanana – Developer & Media Utility Hub",
+    description:
+      "Free, fast utilities for developers and creators: JSON formatter, JWT decoder, PDF tools, image utilities, and more.",
   },
 
   // ✅ AdSense Meta (BEST PRACTICE)

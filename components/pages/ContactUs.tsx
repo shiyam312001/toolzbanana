@@ -69,8 +69,15 @@ export function ContactUs() {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Contact Us
           </h1>
-          <p className="text-lg text-gray-600">
-            Have a question or suggestion? We'd love to hear from you!
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Have a question or suggestion? We read every message. Please include enough
+            detail—URLs, screenshots of errors (with secrets removed), and what browser
+            you use—so we can reproduce the issue quickly.
+          </p>
+          <p className="text-base text-gray-600 max-w-2xl mx-auto mt-4">
+            For privacy-related requests, mention whether you are asking about
+            advertising cookies, data retention, or a specific tool workflow. That helps
+            route your note to the correct checklist without extra back-and-forth.
           </p>
         </div>
       </section>

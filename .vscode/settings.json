@@ -1,0 +1,4 @@
+{
+  "eslint.workingDirectories": ["."],
+  "tailwindCSS.experimental.configFile": "app/globals.css"
+}

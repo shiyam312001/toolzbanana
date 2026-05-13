@@ -132,8 +132,34 @@ export default function ToolPageClient({ rawSegment }) {
             </p>
           </div>
           <div className="bt-tool-body">
-            <div className="bt-info">
-              <p>Please choose a tool from the navigation to continue.</p>
+            <div className="bt-info space-y-4">
+              <p>
+                This URL does not match a published utility on ToolzBanana. Stale
+                bookmarks, manual typos, or renamed tools can all lead here. There
+                are no advertisements on this screen so you can navigate without
+                distraction.
+              </p>
+              <p>
+                Use the sidebar to pick a working tool, open the{" "}
+                <Link href="/tools" className="text-[#c43e0e] font-semibold hover:underline">
+                  full tools directory
+                </Link>
+                , or return to the{" "}
+                <Link href="/" className="text-[#c43e0e] font-semibold hover:underline">
+                  homepage
+                </Link>{" "}
+                for an overview of categories. If you followed a link from another
+                site, consider letting the publisher know the destination is out of
+                date.
+              </p>
+              <p>
+                Our{" "}
+                <Link href="/blog" className="text-[#c43e0e] font-semibold hover:underline">
+                  articles and guides
+                </Link>{" "}
+                explain how we structure browser-based workflows and what data stays
+                on your device for each class of tool.
+              </p>
             </div>
           </div>
         </main>

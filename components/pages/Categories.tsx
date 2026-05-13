@@ -26,6 +26,24 @@ export function Categories() {
 
       <CategoriesGrid categories={categories} />
 
+      <section className="py-12 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto text-gray-700 leading-relaxed space-y-4">
+          <h2 className="text-2xl font-bold text-gray-900">Why categories matter</h2>
+          <p>
+            Grouping utilities by intent—developer data, images, and PDFs—helps you
+            discover adjacent tools you might not have searched for directly. For
+            example, someone compressing images for a website often also needs
+            format conversion or exact resizing before upload.
+          </p>
+          <p>
+            When you open a category card you will see a short description of the
+            workflows we support. From there, the tools directory lets you filter
+            further or jump straight into a dedicated page with long-form guidance
+            and the interactive UI.
+          </p>
+        </div>
+      </section>
+
       <div className="px-4 py-8">
         <AdBanner />
       </div>

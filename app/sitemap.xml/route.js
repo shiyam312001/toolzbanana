@@ -1,9 +1,8 @@
 import { TOOL_CATEGORIES } from "../../components/tools-data";
-
-const SITE_URL = "https://toolzbanana.com";
+import { SITE_URL } from "../../lib/site-config";
+import { getAllBlogSlugs } from "../../lib/blog-posts";
 
 function toISODate(d) {
-  // YYYY-MM-DD
   return d.toISOString().slice(0, 10);
 }
 
@@ -14,14 +13,30 @@ export async function GET() {
     cat.tools.map((t) => t.slug),
   );
 
+  const blogSlugs = getAllBlogSlugs();
+
   const urls = [
-    { loc: `${SITE_URL}/`, priority: 1.0 },
-    { loc: `${SITE_URL}/tools`, priority: 0.9 },
-    { loc: `${SITE_URL}/privacy-policy`, priority: 0.3 },
-    { loc: `${SITE_URL}/terms-and-conditions`, priority: 0.3 },
+    { loc: `${SITE_URL}/`, priority: 1.0, changefreq: "weekly" },
+    { loc: `${SITE_URL}/tools`, priority: 0.9, changefreq: "weekly" },
+    { loc: `${SITE_URL}/categories`, priority: 0.85, changefreq: "weekly" },
+    { loc: `${SITE_URL}/about`, priority: 0.6, changefreq: "monthly" },
+    { loc: `${SITE_URL}/contact-us`, priority: 0.6, changefreq: "monthly" },
+    { loc: `${SITE_URL}/blog`, priority: 0.75, changefreq: "weekly" },
+    ...blogSlugs.map((slug) => ({
+      loc: `${SITE_URL}/blog/${slug}`,
+      priority: 0.65,
+      changefreq: "monthly",
+    })),
+    { loc: `${SITE_URL}/privacy-policy`, priority: 0.4, changefreq: "yearly" },
+    { loc: `${SITE_URL}/terms-of-service`, priority: 0.35, changefreq: "yearly" },
+    { loc: `${SITE_URL}/terms-and-conditions`, priority: 0.35, changefreq: "yearly" },
+    { loc: `${SITE_URL}/tools/code`, priority: 0.75, changefreq: "weekly" },
+    { loc: `${SITE_URL}/tools/image`, priority: 0.75, changefreq: "weekly" },
+    { loc: `${SITE_URL}/tools/pdf`, priority: 0.75, changefreq: "weekly" },
     ...toolSlugs.map((slug) => ({
       loc: `${SITE_URL}/tools/${slug}`,
       priority: 0.8,
+      changefreq: "weekly",
     })),
   ];
 
@@ -34,7 +49,7 @@ ${uniqueUrls
     (u) => `  <url>
     <loc>${u.loc}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`,
   )
@@ -47,4 +62,3 @@ ${uniqueUrls
     },
   });
 }
-

@@ -198,6 +198,24 @@ export function AllTools() {
         </section>
       )}
 
+      <section className="py-12 px-4 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-4xl mx-auto text-gray-700 leading-relaxed space-y-4">
+          <h2 className="text-2xl font-bold text-gray-900">Using the tools directory</h2>
+          <p>
+            Start from categories when you are exploring, or jump to{" "}
+            <strong>All Tools</strong> when you already know the name of the utility
+            you need. The search box updates the URL so you can bookmark a filtered
+            view for recurring tasks such as PDF merges or JSON formatting.
+          </p>
+          <p>
+            Each individual tool page on ToolzBanana includes a detailed article
+            beneath the interactive workspace. That content is written for humans
+            first and explains privacy boundaries, common pitfalls, and suggested
+            workflows—so you are never looking at a bare widget without context.
+          </p>
+        </div>
+      </section>
+
       <div className="px-4 py-8">
         <AdBanner />
       </div>

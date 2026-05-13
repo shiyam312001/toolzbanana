@@ -15,7 +15,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-gray-600 mb-4">
-              Your one-stop destination for 60+ free online tools. Simplify your workflow with our comprehensive collection of utilities.
+              Free browser-based utilities for developers and creators—JSON, JWT, PDF, and image workflows—with in-depth guides on every tool page.
             </p>
             <p className="text-sm text-gray-500">
               © {currentYear} ToolzBanana. All rights reserved.
@@ -43,6 +43,11 @@ export function Footer() {
               <li>
                 <Link href="/about" className="text-gray-600 hover:text-yellow-600 transition-colors">
                   About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="text-gray-600 hover:text-yellow-600 transition-colors">
+                  Blog & guides
                 </Link>
               </li>
             </ul>

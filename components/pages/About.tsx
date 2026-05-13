@@ -27,14 +27,28 @@ export function About() {
         <div className="max-w-4xl mx-auto">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-              ToolzBanana is a free online tools platform designed to simplify your daily tasks.
-              Whether you need to compress a PDF, resize an image, or generate a secure password,
-              we've got you covered with 60+ powerful tools.
+              ToolzBanana is a curated collection of free browser-based utilities for
+              developers, designers, and operations teams who need dependable results
+              without installing yet another desktop application. We focus on JSON,
+              JWT, encoding, PDF, and image workflows that come up every week in real
+              tickets—not novelty generators with empty pages.
+            </p>
+
+            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              Our mission is to pair fast tools with honest documentation. That is
+              why every tool route ships with a long editorial article that explains
+              how to use the feature safely, what stays local in your browser, and
+              which mistakes we see most often in support mail. Thin landing pages
+              are not part of the plan: readers should leave with context, not just a
+              download button.
             </p>
 
             <p className="text-gray-600 text-lg leading-relaxed mb-12">
-              Our mission is to provide high-quality, easy-to-use tools that help you work smarter,
-              not harder. No sign-ups, no hidden fees, just simple tools that work.
+              ToolzBanana is supported in part by display advertising on pages that
+              include substantial publisher-written content, in line with programme
+              policies. We avoid placing ads on sparse or purely navigational screens
+              so the experience stays focused when you are trying to recover from a
+              broken link or find the right utility quickly.
             </p>
           </div>
 

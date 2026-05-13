@@ -1,38 +1,32 @@
 import { Home as HomePage } from "../components/pages/Home";
-
-const SITE_URL = "https://toolzbanana.com";
+import { SITE_URL } from "../lib/site-config";
 
 export const metadata = {
-  title: "ToolzBanana – Free Online Tools for PDF, Image, SEO & Developers (No Login)",
+  title: "ToolzBanana – Free developer, PDF & image tools (no login)",
   description:
-    "Use ToolzBanana for free online PDF, image, SEO and developer tools. No login required. Fast, secure and easy tools for everyone in India.",
+    "ToolzBanana offers free browser-based utilities for developers and creators: JSON and JWT helpers, Base64 tools, regex and SQL formatters, image compression and conversion, and PDF merge, split, and export—with editorial guides on every page.",
   keywords: [
-    "free online tools without login",
-    "developer tools free online",
-    "all in one online tools website",
-    "free productivity tools website",
-    "toolzbanana tools",
-    "free pdf tools without login",
-    "image compressor online free",
-    "free seo keyword generator tool",
-    "free online tools india",
-    "chennai online tools website",
-    "best free pdf tools without login in india",
-    "all in one developer tools website free",
+    "free online developer tools",
+    "JSON formatter online",
+    "JWT decoder browser",
+    "PDF merge free",
+    "image compressor online",
+    "ToolzBanana",
+    "browser-based utilities",
   ],
   alternates: {
     canonical: `${SITE_URL}/`,
   },
   openGraph: {
-    title: "ToolzBanana – Free Online Tools for PDF, Image, SEO & Developers (No Login)",
+    title: "ToolzBanana – Free developer, PDF & image tools (no login)",
     description:
-      "Use ToolzBanana for free online PDF, image, SEO and developer tools. No login required. Fast, secure and easy tools for everyone in India.",
+      "Free browser-based utilities for developers and creators, with in-depth guides on every tool page.",
     url: `${SITE_URL}/`,
   },
   twitter: {
-    title: "ToolzBanana – Free Online Tools for PDF, Image, SEO & Developers (No Login)",
+    title: "ToolzBanana – Free developer, PDF & image tools (no login)",
     description:
-      "Use ToolzBanana for free online PDF, image, SEO and developer tools. No login required. Fast, secure and easy tools for everyone in India.",
+      "Free browser-based utilities for developers and creators, with in-depth guides on every tool page.",
   },
 };
 

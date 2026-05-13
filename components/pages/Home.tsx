@@ -30,9 +30,49 @@ export function Home() {
 
       <FeaturesSection />
 
-      <div className="px-4 py-8">
-        <AdBanner />
-      </div>
+      <section className="py-16 px-4 bg-gray-50 border-y border-gray-200">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Free tools with real explanations
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            ToolzBanana pairs interactive utilities with long-form guidance on every
+            tool route. That editorial layer explains typical workflows, privacy
+            expectations, and common mistakes—so pages stay useful even if you are
+            only reading, not clicking run yet.
+          </p>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Developer utilities such as JSON formatting, JWT inspection, Base64
+            helpers, and regex testing are designed for quick feedback loops while
+            you debug APIs. Media utilities cover compression, conversion, resizing,
+            and PDF merge/split flows you can often complete without installing
+            another desktop suite.
+          </p>
+          <p className="text-gray-700 leading-relaxed mb-6">
+            We also publish standalone{" "}
+            <Link href="/blog" className="text-yellow-700 font-semibold hover:underline">
+              articles and guides
+            </Link>{" "}
+            on browser-based processing, responsible use of tokens, and building
+            reliable PDF and image pipelines.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <Link
+              href="/tools"
+              className="inline-flex items-center gap-2 rounded-lg bg-yellow-500 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-yellow-400 transition-colors"
+            >
+              Browse all tools
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-800 hover:border-yellow-400 transition-colors"
+            >
+              About ToolzBanana
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <CategoriesGrid
         categories={categories}
