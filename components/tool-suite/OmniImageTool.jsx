@@ -3,8 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { ImageToolShell } from "./ImageTool";
 
-const DEMO_PREVIEW =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDjCCsB9K58xYL0_uf1jL57bM5UVDzA2ma94FJWOGVc6xP6MVinWKQD8esOZYAkPEHKpc-N9bWQb_9M9nyc-xho__a7MOQwW0gq4_GLakUqyi4Vityn615jCKaqV4Q5z_bXCibGp2JZwwjXnsDpDwkbc8in8aLgTMlGuLPx8kq_wPMjXITwlNKMHHCYI4nkxhRagqhVNdiSxt2TmCVuWP7eveMeMMfQxj08BnC2bjkenPKj8ofzQrjOXgzUsN1EfE-xSf6x6SfI03k";
+const DEMO_PREVIEW = "/file.svg";
 
 function formatMb(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;

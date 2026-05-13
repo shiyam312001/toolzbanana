@@ -4,8 +4,7 @@ import Link from "next/link";
 import { PDFDocument } from "pdf-lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const DECOR_IMG =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDcWbO-Nt7ITSkKB4w6jwDfB2q5Lz6Id235kZK36UUzF3zJfav7IV2CnXNoqB2shVURfJZPVUK0MZRy5vn0XRt3utuAUeWldVYUG2Q4sP_tqzWrUbXbHa3zVgOvdoV_ZzLlS5VeJY5YJwkyJRyqWoSyX7orCtcdthAbBtlglolQ0rt4dRhmQItmvJwvVW_PdoXYThhNuQJSsF4yAP-HM9PHj5eLeaWnM7EpuBFCSyjxw01_HFnvhHJkGsuHsm-2Ald_Ioaa1Q-iYg";
+const DECOR_IMG = "/file.svg";
 
 function formatSize(bytes) {
   if (bytes < 1024) return `${bytes} B`;
