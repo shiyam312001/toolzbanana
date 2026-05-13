@@ -6,6 +6,7 @@ import { TrendingTools } from "./sections/trending-tools";
 import { HowItWorks } from "./sections/how-it-works";
 import { WhyUse } from "./sections/why-use";
 import { LatestArticles } from "./sections/latest-articles";
+import { FAQ } from "./sections/faq";
 import { Footer } from "./sections/footer";
 import { AdBlock } from "../ui/AdBlock";
 
@@ -23,6 +24,7 @@ export function HomePage() {
       <ToolCategories />
       <TrendingTools />
       <HowItWorks />
+      <FAQ />
       <section className="py-6 lg:py-8">
         <div className="ds-container">
           <AdBlock size="728x90" />

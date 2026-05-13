@@ -95,3 +95,36 @@ export const articles = [
       "Reduce file size, keep text sharp, and share documents faster.",
   },
 ];
+
+export const faqs = [
+  {
+    question: "Do ToolzBanana tools run in my browser or on your servers?",
+    answer:
+      "Most tools are designed to run directly in your browser for faster processing and better privacy. If a workflow needs server processing, the tool page clearly explains it.",
+  },
+  {
+    question: "Can I use ToolzBanana without creating an account?",
+    answer:
+      "Yes. Core utilities are available without signup, so you can quickly format code, optimize images, and process PDFs without extra steps.",
+  },
+  {
+    question: "Why does background removal take longer the first time?",
+    answer:
+      "The first run downloads AI model files needed for segmentation. Once cached by your browser, later runs are usually much faster.",
+  },
+  {
+    question: "Which file types are best for the image tools?",
+    answer:
+      "JPEG, PNG, and WEBP are best for most image workflows. For background removal, use a clear subject image with good contrast for the cleanest edges.",
+  },
+  {
+    question: "How can I get better compression without losing quality?",
+    answer:
+      "Start with moderate compression, preview the result at real usage size, then adjust quality in small steps. WEBP often gives a better size-quality balance for web use.",
+  },
+  {
+    question: "Do you support bulk and advanced workflows?",
+    answer:
+      "Yes. Several tools support multi-file input and practical batch-style tasks. If your workflow is repetitive, share your use case and we can prioritize deeper automation.",
+  },
+];

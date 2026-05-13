@@ -10,6 +10,12 @@ import { PDFDocument } from "pdf-lib";
 import jsPDF from "jspdf";
 
 const BG_REMOVER_MAX_DIMENSION = 1600;
+const BG_REMOVER_PUBLIC_PATHS = [
+  undefined,
+  "https://staticimgly.com/@imgly/background-removal-data/1.7.0/dist/",
+  "https://cdn.jsdelivr.net/npm/@imgly/background-removal-data@1.7.0/dist/",
+  "https://unpkg.com/@imgly/background-removal-data@1.7.0/dist/",
+] as const;
 
 async function readImageDimensions(file: File): Promise<{ width: number; height: number }> {
   const src = URL.createObjectURL(file);
@@ -62,6 +68,133 @@ async function downscaleForBackgroundRemoval(file: File): Promise<{ blob: Blob; 
       throw new Error("Failed to prepare image.");
     }
     return { blob, scaled: true };
+  } finally {
+    URL.revokeObjectURL(src);
+  }
+}
+
+async function runBackgroundRemovalWithFallback(inputBlob: Blob): Promise<Blob> {
+  let lastError: unknown = null;
+  for (const publicPath of BG_REMOVER_PUBLIC_PATHS) {
+    try {
+      if (publicPath) {
+        return await removeBackground(inputBlob, { publicPath, fetchArgs: { mode: "cors" } });
+      }
+      return await removeBackground(inputBlob, { fetchArgs: { mode: "cors" } });
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError instanceof Error
+    ? new Error(
+        `${lastError.message}. Unable to download background-removal assets from CDN. Please check your internet/firewall and try again.`,
+      )
+    : new Error("Unable to download background-removal assets from CDN.");
+}
+
+function colorDistanceSq(a: [number, number, number], b: [number, number, number]): number {
+  const dr = a[0] - b[0];
+  const dg = a[1] - b[1];
+  const db = a[2] - b[2];
+  return dr * dr + dg * dg + db * db;
+}
+
+async function removeBackgroundOffline(inputBlob: Blob): Promise<Blob> {
+  const src = URL.createObjectURL(inputBlob);
+  try {
+    const img = new Image();
+    img.src = src;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error("Failed to decode image for offline fallback."));
+    });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Canvas is unavailable.");
+
+    ctx.drawImage(img, 0, 0);
+    const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const { data, width, height } = frame;
+
+    const corner = (x: number, y: number): [number, number, number] => {
+      const i = (y * width + x) * 4;
+      return [data[i], data[i + 1], data[i + 2]];
+    };
+
+    // Estimate background from image corners.
+    const c1 = corner(0, 0);
+    const c2 = corner(width - 1, 0);
+    const c3 = corner(0, height - 1);
+    const c4 = corner(width - 1, height - 1);
+    const bg: [number, number, number] = [
+      Math.round((c1[0] + c2[0] + c3[0] + c4[0]) / 4),
+      Math.round((c1[1] + c2[1] + c3[1] + c4[1]) / 4),
+      Math.round((c1[2] + c2[2] + c3[2] + c4[2]) / 4),
+    ];
+
+    const visited = new Uint8Array(width * height);
+    const queue = new Uint32Array(width * height);
+    let qHead = 0;
+    let qTail = 0;
+
+    const thresholdSq = 42 * 42;
+    const softThresholdSq = 62 * 62;
+
+    const enqueue = (x: number, y: number) => {
+      if (x < 0 || y < 0 || x >= width || y >= height) return;
+      const idx = y * width + x;
+      if (visited[idx]) return;
+      const di = idx * 4;
+      const distSq = colorDistanceSq(
+        [data[di], data[di + 1], data[di + 2]],
+        bg,
+      );
+      if (distSq > softThresholdSq) return;
+      visited[idx] = 1;
+      queue[qTail++] = idx;
+    };
+
+    // Seed flood-fill from borders.
+    for (let x = 0; x < width; x++) {
+      enqueue(x, 0);
+      enqueue(x, height - 1);
+    }
+    for (let y = 1; y < height - 1; y++) {
+      enqueue(0, y);
+      enqueue(width - 1, y);
+    }
+
+    while (qHead < qTail) {
+      const idx = queue[qHead++];
+      const x = idx % width;
+      const y = (idx / width) | 0;
+      const di = idx * 4;
+      const distSq = colorDistanceSq(
+        [data[di], data[di + 1], data[di + 2]],
+        bg,
+      );
+
+      // Fully remove confident background pixels, soften uncertain edge pixels.
+      if (distSq <= thresholdSq) {
+        data[di + 3] = 0;
+      } else {
+        const ratio = Math.min(1, (distSq - thresholdSq) / Math.max(1, softThresholdSq - thresholdSq));
+        data[di + 3] = Math.max(0, Math.round(255 * ratio));
+      }
+
+      enqueue(x - 1, y);
+      enqueue(x + 1, y);
+      enqueue(x, y - 1);
+      enqueue(x, y + 1);
+    }
+
+    ctx.putImageData(frame, 0, 0);
+    const out = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.92));
+    if (!out) throw new Error("Offline background-removal fallback failed.");
+    return out;
   } finally {
     URL.revokeObjectURL(src);
   }
@@ -395,13 +528,24 @@ export function useToolClientEngine(slug: string) {
           }
           const file = files[0];
           const { blob: preparedBlob, scaled } = await downscaleForBackgroundRemoval(file);
-          const blob = await removeBackground(preparedBlob);
+          let blob: Blob;
+          let usedOfflineFallback = false;
+          try {
+            blob = await runBackgroundRemovalWithFallback(preparedBlob);
+          } catch (networkErr) {
+            blob = await removeBackgroundOffline(preparedBlob);
+            usedOfflineFallback = true;
+            console.warn("AI background removal unavailable, used offline fallback:", networkErr);
+          }
           setResultBlob(blob);
           const speedNote = scaled
             ? `\nOptimized input to max ${BG_REMOVER_MAX_DIMENSION}px for faster processing.`
             : "";
+          const fallbackNote = usedOfflineFallback
+            ? "\nUsed offline fallback mode due to model download/network issue."
+            : "";
           setOutput(
-            `Background removed for ${file.name}\nOutput size: ${(blob.size / 1024).toFixed(1)} KB${speedNote}`,
+            `Background removed for ${file.name}\nOutput size: ${(blob.size / 1024).toFixed(1)} KB${speedNote}${fallbackNote}`,
           );
           break;
         }

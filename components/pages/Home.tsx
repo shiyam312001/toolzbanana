@@ -12,6 +12,29 @@ import { ToolCard } from '../components/common/ToolCard';
 import { categories, popularTools, tools } from '../data/tools';
 import { useRecentTools } from '../hooks/useRecentTools';
 
+const homeFaqs = [
+  {
+    question: "Do ToolzBanana tools run in browser?",
+    answer:
+      "Most tools run directly in your browser for speed and privacy. Some flows may use server processing when required by the tool.",
+  },
+  {
+    question: "Why can background remover be slow first time?",
+    answer:
+      "The first run may need model assets and warmup time. Later runs are faster after caching.",
+  },
+  {
+    question: "Can I use tools without account?",
+    answer:
+      "Yes, core ToolzBanana utilities are available without sign up.",
+  },
+  {
+    question: "Which image formats are best supported?",
+    answer:
+      "JPEG, PNG, and WEBP are the most reliable for compression, conversion, and background workflows.",
+  },
+];
+
 export function Home() {
   const { recentTools } = useRecentTools();
 
@@ -143,6 +166,30 @@ export function Home() {
       </section>
 
       <HowItWorksSection />
+
+      <section className="py-16 px-4 bg-white border-t border-gray-200">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+            <p className="text-gray-600 mt-2">
+              Quick answers about using ToolzBanana tools.
+            </p>
+          </div>
+          <div className="space-y-3">
+            {homeFaqs.map((item) => (
+              <details
+                key={item.question}
+                className="rounded-xl border border-gray-200 bg-gray-50 p-4"
+              >
+                <summary className="cursor-pointer list-none font-semibold text-gray-900">
+                  {item.question}
+                </summary>
+                <p className="mt-2 text-sm text-gray-700 leading-relaxed">{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <div className="px-4 py-8">
         <AdBanner />
