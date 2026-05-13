@@ -22,39 +22,83 @@ const bricolageGrotesque = Bricolage_Grotesque({
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
+
   title: {
-    default: "ToolzBanana – Developer & Media Utility Hub",
-    template: "%s · ToolzBanana",
+    default: "ToolzBanana – Free Online Developer & Media Tools",
+    template: "%s | ToolzBanana",
   },
+
   description:
-    "Free, fast utilities for developers and creators: JSON formatter, JWT decoder, PDF tools, image utilities, and more in a single interface.",
+    "ToolzBanana offers free online developer tools, PDF tools, image utilities, JSON formatter, JWT decoder, SEO tools, and productivity utilities for creators and developers.",
+
+  keywords: [
+    "developer tools",
+    "pdf tools",
+    "image tools",
+    "json formatter",
+    "jwt decoder",
+    "seo tools",
+    "online utilities",
+    "toolzbanana",
+  ],
+
+  authors: [
+    {
+      name: "ToolzBanana",
+      url: SITE_URL,
+    },
+  ],
+
+  creator: "ToolzBanana",
+  publisher: "ToolzBanana",
+
+  alternates: {
+    canonical: SITE_URL,
+  },
+
+  verification: {
+    google: "PASTE_GOOGLE_VERIFICATION_CODE_HERE",
+  },
+
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
+
   openGraph: {
     type: "website",
     url: SITE_URL,
     siteName: "ToolzBanana",
     locale: "en_US",
-    title: "ToolzBanana – Developer & Media Utility Hub",
+    title: "ToolzBanana – Free Online Developer & Media Tools",
     description:
-      "Free, fast utilities for developers and creators: JSON formatter, JWT decoder, PDF tools, image utilities, and more in a single interface.",
+      "Free online tools for developers and creators including JSON formatter, JWT decoder, PDF tools, image tools, and SEO utilities.",
+
     images: [
       {
         url: "/file.svg",
+        width: 1200,
+        height: 630,
         alt: "ToolzBanana",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "ToolzBanana – Developer & Media Utility Hub",
+    title: "ToolzBanana – Free Online Developer & Media Tools",
     description:
-      "Free, fast utilities for developers and creators: JSON formatter, JWT decoder, PDF tools, image utilities, and more.",
+      "Free online tools for developers and creators including JSON formatter, JWT decoder, PDF tools, image tools, and SEO utilities.",
+    images: ["/file.svg"],
   },
 
-  // ✅ AdSense Meta (BEST PRACTICE)
   other: {
     "google-adsense-account": "ca-pub-2466646777584490",
   },
@@ -63,21 +107,26 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }) {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "WebSite",
     name: "ToolzBanana",
     url: SITE_URL,
-    logo: `${SITE_URL}/file.svg`,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE_URL}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
   };
 
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* ✅ AdSense Script */}
+        {/* Google AdSense */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2466646777584490"
@@ -85,7 +134,22 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
         />
 
-        {/* Prevent dark mode flash */}
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-MDP4MC0YV1"
+          strategy="afterInteractive"
+        />
+
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MDP4MC0YV1');
+          `}
+        </Script>
+
+        {/* Prevent dark flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -117,16 +181,18 @@ export default function RootLayout({ children }) {
 
         <Navbar />
 
-        <div id="content" className="min-h-screen">
+        <main id="content" className="min-h-screen">
           {children}
-        </div>
+        </main>
 
         <Footer />
 
-        {/* ✅ Structured Data */}
+        {/* Structured Data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
         />
       </body>
     </html>
