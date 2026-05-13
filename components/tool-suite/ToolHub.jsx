@@ -111,7 +111,7 @@ export function ToolHub({ category }) {
   );
 
   return (
-    <div className="max-w-4xl w-full mx-auto">
+    <div className="max-w-7xl w-full mx-auto">
       <header className="mb-8">
         <div className="flex items-center gap-2 text-primary font-bold mb-2">
           <span className="material-symbols-outlined text-sm">widgets</span>

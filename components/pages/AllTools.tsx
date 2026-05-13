@@ -199,7 +199,7 @@ export function AllTools() {
       )}
 
       <section className="py-12 px-4 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-4xl mx-auto text-gray-700 leading-relaxed space-y-4">
+        <div className="max-w-7xl mx-auto text-gray-700 leading-relaxed space-y-4">
           <h2 className="text-2xl font-bold text-gray-900">Using the tools directory</h2>
           <p>
             Start from categories when you are exploring, or jump to{" "}

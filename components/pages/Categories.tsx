@@ -27,7 +27,7 @@ export function Categories() {
       <CategoriesGrid categories={categories} />
 
       <section className="py-12 px-4 bg-gray-50">
-        <div className="max-w-4xl mx-auto text-gray-700 leading-relaxed space-y-4">
+        <div className="max-w-7xl mx-auto text-gray-700 leading-relaxed space-y-4">
           <h2 className="text-2xl font-bold text-gray-900">Why categories matter</h2>
           <p>
             Grouping utilities by intent—developer data, images, and PDFs—helps you

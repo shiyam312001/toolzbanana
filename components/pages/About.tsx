@@ -13,7 +13,7 @@ export function About() {
       />
 
       <section className="bg-white border-b border-gray-200 py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
             About ToolzBanana
           </h1>
@@ -24,7 +24,7 @@ export function About() {
       </section>
 
       <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
               ToolzBanana is a curated collection of free browser-based utilities for

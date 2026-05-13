@@ -31,7 +31,7 @@ export function Home() {
       <FeaturesSection />
 
       <section className="py-16 px-4 bg-gray-50 border-y border-gray-200">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Free tools with real explanations
           </h2>
