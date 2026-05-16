@@ -5,9 +5,19 @@ import { format as formatSql } from "sql-formatter";
 import { html as beautifyHtml } from "js-beautify";
 import { minify as terserMinify } from "terser";
 import imageCompression from "browser-image-compression";
+import axios, { isAxiosError } from "axios";
 import { removeBackground } from "@imgly/background-removal";
 import { PDFDocument } from "pdf-lib";
 import jsPDF from "jspdf";
+
+export type ApiTestResult = {
+  ok: boolean;
+  status: number;
+  statusText: string;
+  headers: Record<string, string>;
+  body: unknown;
+  durationMs: number;
+};
 
 const BG_REMOVER_MAX_DIMENSION = 1600;
 const BG_REMOVER_PUBLIC_PATHS = [
@@ -73,14 +83,23 @@ async function downscaleForBackgroundRemoval(file: File): Promise<{ blob: Blob; 
   }
 }
 
-async function runBackgroundRemovalWithFallback(inputBlob: Blob): Promise<Blob> {
+async function runBackgroundRemovalWithFallback(
+  inputBlob: Blob,
+  onProgress?: (percent: number) => void,
+): Promise<Blob> {
   let lastError: unknown = null;
   for (const publicPath of BG_REMOVER_PUBLIC_PATHS) {
     try {
-      if (publicPath) {
-        return await removeBackground(inputBlob, { publicPath, fetchArgs: { mode: "cors" } });
-      }
-      return await removeBackground(inputBlob, { fetchArgs: { mode: "cors" } });
+      const config = {
+        fetchArgs: { mode: "cors" as RequestMode },
+        progress: (_key: string, current: number, total: number) => {
+          if (total > 0 && onProgress) {
+            onProgress(Math.min(92, Math.round((current / total) * 88) + 5));
+          }
+        },
+        ...(publicPath ? { publicPath } : {}),
+      };
+      return await removeBackground(inputBlob, config);
     } catch (err) {
       lastError = err;
     }
@@ -220,6 +239,8 @@ export function useToolClientEngine(slug: string) {
   const [resizeHeight, setResizeHeight] = useState("");
   const [splitPagesSpec, setSplitPagesSpec] = useState("1");
   const [compressQuality, setCompressQuality] = useState(80);
+  const [apiResponse, setApiResponse] = useState<ApiTestResult | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const isImageTool = [
     "image-compressor",
@@ -434,7 +455,10 @@ export function useToolClientEngine(slug: string) {
           break;
         }
         case "api-tester": {
+          setApiResponse(null);
+          setApiError(null);
           if (!url.trim()) {
+            setApiError("Enter a URL to call.");
             setOutput("Enter a URL to call.");
             break;
           }
@@ -443,36 +467,85 @@ export function useToolClientEngine(slug: string) {
             try {
               Object.assign(headers, JSON.parse(headersText));
             } catch {
-              setOutput('Headers must be valid JSON, e.g. { "Authorization": "Bearer ..." }');
+              const msg = 'Headers must be valid JSON, e.g. { "Authorization": "Bearer ..." }';
+              setApiError(msg);
+              setOutput(msg);
               break;
             }
           }
-          const init: RequestInit = { method: httpMethod, headers };
-          if (httpMethod !== "GET" && httpMethod !== "HEAD" && input) init.body = input;
-          try {
-            const res = await fetch(url, init);
-            const text = await res.text();
-            let parsed = null;
-            try {
-              parsed = JSON.parse(text);
-            } catch {
-              /* plain text */
+          const method = httpMethod.toUpperCase();
+          const hasBody = method !== "GET" && method !== "HEAD" && input.trim().length > 0;
+          if (hasBody && !headers["Content-Type"] && !headers["content-type"]) {
+            const trimmed = input.trim();
+            if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+              headers["Content-Type"] = "application/json";
             }
-            setOutput(
-              JSON.stringify(
-                {
-                  ok: res.ok,
-                  status: res.status,
-                  statusText: res.statusText,
-                  headers: Object.fromEntries(res.headers.entries()),
-                  body: parsed ?? text,
-                },
-                null,
-                2,
-              ),
-            );
+          }
+          const started = performance.now();
+          try {
+            const res = await axios.request({
+              url: url.trim(),
+              method,
+              headers,
+              data: hasBody ? input : undefined,
+              validateStatus: () => true,
+              timeout: 60_000,
+              transformResponse: [(data) => data],
+              responseType: "text",
+            });
+            let body: unknown = res.data;
+            const contentType = String(res.headers["content-type"] ?? "");
+            if (typeof body === "string" && contentType.includes("application/json")) {
+              try {
+                body = JSON.parse(body);
+              } catch {
+                /* keep raw string */
+              }
+            } else if (typeof body === "string" && (body.startsWith("{") || body.startsWith("["))) {
+              try {
+                body = JSON.parse(body);
+              } catch {
+                /* keep raw string */
+              }
+            }
+            const flatHeaders: Record<string, string> = {};
+            for (const [k, v] of Object.entries(res.headers)) {
+              if (v === undefined) continue;
+              flatHeaders[k] = Array.isArray(v) ? v.join(", ") : String(v);
+            }
+            const result: ApiTestResult = {
+              ok: res.status >= 200 && res.status < 300,
+              status: res.status,
+              statusText: res.statusText,
+              headers: flatHeaders,
+              body,
+              durationMs: Math.round(performance.now() - started),
+            };
+            setApiResponse(result);
+            setOutput(JSON.stringify(result, null, 2));
           } catch (err: unknown) {
-            setOutput("Request error: " + (err as Error).message);
+            let message = "Request error: " + (err as Error).message;
+            if (isAxiosError(err) && err.response) {
+              const flatHeaders: Record<string, string> = {};
+              for (const [k, v] of Object.entries(err.response.headers)) {
+                if (v === undefined) continue;
+                flatHeaders[k] = Array.isArray(v) ? v.join(", ") : String(v);
+              }
+              const result: ApiTestResult = {
+                ok: false,
+                status: err.response.status,
+                statusText: err.response.statusText,
+                headers: flatHeaders,
+                body: err.response.data,
+                durationMs: Math.round(performance.now() - started),
+              };
+              setApiResponse(result);
+              setOutput(JSON.stringify(result, null, 2));
+              break;
+            }
+            if (isAxiosError(err) && err.message) message = err.message;
+            setApiError(message);
+            setOutput(message);
           }
           break;
         }
@@ -531,7 +604,7 @@ export function useToolClientEngine(slug: string) {
           let blob: Blob;
           let usedOfflineFallback = false;
           try {
-            blob = await runBackgroundRemovalWithFallback(preparedBlob);
+            blob = await runBackgroundRemovalWithFallback(preparedBlob, setProcessProgress);
           } catch (networkErr) {
             blob = await removeBackgroundOffline(preparedBlob);
             usedOfflineFallback = true;
@@ -739,6 +812,8 @@ export function useToolClientEngine(slug: string) {
     setOutput("");
     setFiles([]);
     setResultBlob(null);
+    setApiResponse(null);
+    setApiError(null);
   }
 
   function handleDownload() {
@@ -807,6 +882,8 @@ export function useToolClientEngine(slug: string) {
     setSplitPagesSpec,
     compressQuality,
     setCompressQuality,
+    apiResponse,
+    apiError,
     isImageTool,
     isPdfTool,
     isRegexTool,

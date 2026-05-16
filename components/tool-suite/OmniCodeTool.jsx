@@ -1,5 +1,6 @@
 "use client";
 
+import { ApiTesterWorkspace } from "../api-tester/ApiTesterWorkspace";
 import { CodeToolShell } from "./CodeTool";
 
 /** @param {{ slug: string; tool: { title: string; description: string }; engine: import("../use-tool-client-engine").ToolClientEngine }} props */
@@ -24,7 +25,33 @@ export function OmniCodeTool({ slug, tool, engine }) {
     handleRun,
     handleClear,
     handleCopy,
+    apiResponse,
+    apiError,
   } = engine;
+
+  if (slug === "api-tester") {
+    return (
+      <ApiTesterWorkspace
+        variant="omni"
+        title={tool.title}
+        description={tool.description}
+        httpMethod={httpMethod}
+        setHttpMethod={setHttpMethod}
+        url={url}
+        setUrl={setUrl}
+        headersText={headersText}
+        setHeadersText={setHeadersText}
+        body={input}
+        setBody={setInput}
+        isLoading={isLoading}
+        apiResponse={apiResponse}
+        apiError={apiError}
+        onSend={handleRun}
+        onClear={handleClear}
+        onCopy={handleCopy}
+      />
+    );
+  }
 
   const errLine =
     output.startsWith("Error:") ||

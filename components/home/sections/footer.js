@@ -23,10 +23,15 @@ export function Footer() {
               Quick Links
             </div>
             <ul className="mt-4 space-y-2.5">
-              {["Home", "All Tools", "Categories", "About"].map((label) => (
-                <li key={label}>
-                  <Link href="/" className="text-[12px] text-gray-400 transition hover:text-white">
-                    {label}
+              {[
+                { label: "Home", href: "/" },
+                { label: "All Tools", href: "/tools" },
+                { label: "Categories", href: "/categories" },
+                { label: "About", href: "/about" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-[12px] text-gray-400 transition hover:text-white">
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -39,10 +44,15 @@ export function Footer() {
               Categories
             </div>
             <ul className="mt-4 space-y-2.5">
-              {["PDF Tools", "Image Tools", "Text Tools", "Developer Tools"].map((label) => (
-                <li key={label}>
-                  <Link href="/#categories" className="text-[12px] text-gray-400 transition hover:text-white">
-                    {label}
+              {[
+                { label: "PDF Tools", href: "/tools?category=pdf" },
+                { label: "Image Tools", href: "/tools?category=image" },
+                { label: "Text Tools", href: "/categories" },
+                { label: "Developer Tools", href: "/tools?category=developer" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-[12px] text-gray-400 transition hover:text-white">
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -58,7 +68,7 @@ export function Footer() {
               {[
                 { label: "Privacy Policy", href: "/privacy-policy" },
                 { label: "Terms of Service", href: "/terms-and-conditions" },
-                { label: "Contact", href: "/contact" },
+                { label: "Contact", href: "/contact-us" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-[12px] text-gray-400 transition hover:text-white">

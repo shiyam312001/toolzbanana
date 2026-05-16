@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { articles } from "../home-data";
 import { Card } from "../../ui/Card";
 import { SectionWrapper } from "../../ui/SectionWrapper";
@@ -12,12 +13,12 @@ export function LatestArticles() {
             Updates, tips, and quick guides.
           </p>
         </div>
-        <a
-          href="#articles"
+        <Link
+          href="/blog"
           className="text-sm font-semibold text-ds-primary hover:text-ds-primary-hover"
         >
           View all
-        </a>
+        </Link>
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">

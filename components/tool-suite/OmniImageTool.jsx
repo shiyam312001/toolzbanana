@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
+import { BackgroundRemoverCompare } from "../image-tools/BackgroundRemoverCompare";
 import { ImageToolShell } from "./ImageTool";
 
 const DEMO_PREVIEW = "/file.svg";
@@ -150,6 +151,14 @@ export function OmniImageTool({ slug, tool, engine }) {
         onPrimary={handleRun}
         onPickFile={onPickFile}
       />
+      {slug === "background-remover" && files[0] ? (
+        <BackgroundRemoverCompare
+          variant="omni"
+          beforeFile={files[0]}
+          resultBlob={resultBlob}
+          isLoading={isLoading}
+        />
+      ) : null}
       {(output || resultBlob) && (
         <div className="w-full max-w-2xl mt-8 flex flex-col gap-3 items-stretch">
           {output ? (

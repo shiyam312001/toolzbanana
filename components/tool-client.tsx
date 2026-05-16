@@ -2,6 +2,8 @@
 
 import { ToolShell } from "./tool-shell";
 import { ToolEditorialSection } from "./tools/ToolEditorialSection";
+import { ApiTesterWorkspace } from "./api-tester/ApiTesterWorkspace";
+import { BackgroundRemoverCompare } from "./image-tools/BackgroundRemoverCompare";
 import { OmniToolDispatcher } from "./tool-suite/OmniToolDispatcher";
 import { useToolClientEngine } from "./use-tool-client-engine";
 
@@ -909,7 +911,36 @@ export function ToolClient({
     handleClear,
     handleCopy,
     handleDownload,
+    apiResponse,
+    apiError,
   } = engine;
+
+  if (isApiTester) {
+    return (
+      <>
+        <ApiTesterWorkspace
+          variant="legacy"
+          title={tool.title}
+          description={tool.description}
+          httpMethod={httpMethod}
+          setHttpMethod={setHttpMethod}
+          url={url}
+          setUrl={setUrl}
+          headersText={headersText}
+          setHeadersText={setHeadersText}
+          body={input}
+          setBody={setInput}
+          isLoading={isLoading}
+          apiResponse={apiResponse}
+          apiError={apiError}
+          onSend={handleRun}
+          onClear={handleClear}
+          onCopy={handleCopy}
+        />
+        <ToolEditorialSection slug={slug} variant="legacy" />
+      </>
+    );
+  }
 
   /* ────────────────────────────────────────────
      Render
@@ -1258,6 +1289,15 @@ export function ToolClient({
             )}
           </RunBar>
         </Panel>
+
+        {slug === "background-remover" && files[0] ? (
+          <BackgroundRemoverCompare
+            variant="legacy"
+            beforeFile={files[0]}
+            resultBlob={resultBlob}
+            isLoading={isLoading}
+          />
+        ) : null}
 
         {slug === "background-remover" && (
           <div

@@ -26,7 +26,7 @@ export function HowItWorksNavbar() {
         <span className="text-[11px] text-gray-500">rk</span>
         <Link href="/" className="text-[11px] font-medium text-gray-600 hover:text-gray-900">Home</Link>
         <Link href="/tools" className="text-[11px] font-medium text-gray-600 hover:text-gray-900">All tools</Link>
-        <Link href="/#categories" className="text-[11px] font-medium text-gray-600 hover:text-gray-900">Categories</Link>
+        <Link href="/categories" className="text-[11px] font-medium text-gray-600 hover:text-gray-900">Categories</Link>
         <Link href="/about" className="text-[11px] font-medium text-gray-600 hover:text-gray-900">About</Link>
         {/* Theme toggle placeholder */}
         <button className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-200 text-[11px]">☀</button>

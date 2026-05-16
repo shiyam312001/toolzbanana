@@ -8,7 +8,7 @@ export default function ApiTesterTool() {
       slug="api-tester"
       title="API Tester"
       badge="REST"
-      description="Quickly send HTTP requests with custom methods, headers, and bodies and inspect responses."
+      description="Send HTTP requests with axios, edit JSON in Monaco, and inspect responses with an interactive tree view."
     />
   );
 }

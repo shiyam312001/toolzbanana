@@ -3,12 +3,12 @@ import { Search } from "lucide-react";
 import { SectionWrapper } from "../../ui/SectionWrapper";
 
 const CATEGORY_CHIPS = [
-  { label: "PDF",        emoji: "📄", href: "/#categories" },
-  { label: "Image",      emoji: "🖼️", href: "/#categories" },
-  { label: "Text",       emoji: "📝", href: "/#categories" },
-  { label: "Developer",  emoji: "👾", href: "/tools" },
-  { label: "Calculator", emoji: "🧮", href: "/#categories" },
-  { label: "Security",   emoji: "🔒", href: "/#categories" },
+  { label: "PDF",        emoji: "📄", href: "/tools?category=pdf" },
+  { label: "Image",      emoji: "🖼️", href: "/tools?category=image" },
+  { label: "Text",       emoji: "📝", href: "/categories" },
+  { label: "Developer",  emoji: "👾", href: "/tools?category=developer" },
+  { label: "Calculator", emoji: "🧮", href: "/categories" },
+  { label: "Security",   emoji: "🔒", href: "/categories" },
 ];
 
 export function Hero() {
@@ -74,7 +74,7 @@ export function Hero() {
             Browse all Tools →
           </Link>
           <Link
-            href="/#categories"
+            href="/categories"
             className="inline-flex items-center rounded-full border border-gray-200 bg-white px-6 py-2 text-[13px] font-semibold text-gray-700 transition hover:bg-gray-50"
           >
             View Categories
