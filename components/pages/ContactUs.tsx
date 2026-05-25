@@ -93,7 +93,7 @@ export function ContactUs() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Email Us</h3>
-                  <p className="text-gray-600">support@toolzbanana.com</p>
+                  <p className="text-gray-600">toolzbanana@gmail.com</p>
                 </div>
               </div>
             </Card>
