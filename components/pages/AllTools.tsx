@@ -5,9 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search } from 'lucide-react';
 import { SEO } from '../components/common/SEO';
+import { AdBanner, AdPlacement } from '../components/common/AdBanner';
 import { ToolCard } from '../components/common/ToolCard';
 import { CategoriesGrid } from '../components/common/CategoriesGrid';
-import { AdBanner } from '../components/common/AdBanner';
 import { Input } from '../components/ui/Input';
 import { tools, categories } from '../data/tools';
 
@@ -233,9 +233,9 @@ export function AllTools() {
         </div>
       </section>
 
-      <div className="px-4 py-8">
+      <AdPlacement className="px-4 py-8">
         <AdBanner />
-      </div>
+      </AdPlacement>
     </div>
   );
 }

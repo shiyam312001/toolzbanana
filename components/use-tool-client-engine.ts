@@ -6,7 +6,11 @@ import { html as beautifyHtml } from "js-beautify";
 import { minify as terserMinify } from "terser";
 import imageCompression from "browser-image-compression";
 import axios, { isAxiosError } from "axios";
-import { removeBackground } from "@imgly/background-removal";
+import {
+  validateImageUpload,
+  validateImageDimensions,
+  RECOMMENDED_MIN_DIMENSION_PX,
+} from "../lib/image-upload-limits";
 import { PDFDocument } from "pdf-lib";
 import jsPDF from "jspdf";
 
@@ -20,14 +24,16 @@ export type ApiTestResult = {
 };
 
 const BG_REMOVER_MAX_DIMENSION = 1600;
-const BG_REMOVER_PUBLIC_PATHS = [
-  undefined,
-  "https://staticimgly.com/@imgly/background-removal-data/1.7.0/dist/",
-  "https://cdn.jsdelivr.net/npm/@imgly/background-removal-data@1.7.0/dist/",
-  "https://unpkg.com/@imgly/background-removal-data@1.7.0/dist/",
-] as const;
 
-async function readImageDimensions(file: File): Promise<{ width: number; height: number }> {
+async function decodeImageSource(file: File): Promise<ImageBitmap | HTMLImageElement> {
+  if (typeof createImageBitmap === "function") {
+    try {
+      return await createImageBitmap(file, { imageOrientation: "from-image" });
+    } catch {
+      // Fall back below
+    }
+  }
+
   const src = URL.createObjectURL(file);
   try {
     const img = new Image();
@@ -36,186 +42,127 @@ async function readImageDimensions(file: File): Promise<{ width: number; height:
       img.onload = () => resolve();
       img.onerror = () => reject(new Error("Failed to read image."));
     });
-    return { width: img.width, height: img.height };
-  } finally {
+    return img;
+  } catch (err) {
     URL.revokeObjectURL(src);
+    throw err;
   }
 }
 
-async function downscaleForBackgroundRemoval(file: File): Promise<{ blob: Blob; scaled: boolean }> {
-  const { width, height } = await readImageDimensions(file);
-  const longestSide = Math.max(width, height);
-  if (longestSide <= BG_REMOVER_MAX_DIMENSION) {
-    return { blob: file, scaled: false };
+function releaseImageSource(source: ImageBitmap | HTMLImageElement) {
+  if ("close" in source && typeof source.close === "function") {
+    source.close();
+    return;
+  }
+  if ("src" in source && source.src.startsWith("blob:")) {
+    URL.revokeObjectURL(source.src);
+  }
+}
+
+/** Decode with EXIF orientation, enforce min size, and export JPEG for reliable API detection. */
+async function prepareImageForBackgroundRemoval(
+  file: File,
+): Promise<{ blob: Blob; scaled: boolean; width: number; height: number }> {
+  const source = await decodeImageSource(file);
+  const width = source.width;
+  const height = source.height;
+
+  const dimCheck = validateImageDimensions(width, height);
+  if (!dimCheck.ok) {
+    releaseImageSource(source);
+    throw new Error(dimCheck.error);
   }
 
-  const ratio = BG_REMOVER_MAX_DIMENSION / longestSide;
+  const longestSide = Math.max(width, height);
+  const scaled = longestSide > BG_REMOVER_MAX_DIMENSION;
+  const ratio = scaled ? BG_REMOVER_MAX_DIMENSION / longestSide : 1;
   const targetWidth = Math.max(1, Math.round(width * ratio));
   const targetHeight = Math.max(1, Math.round(height * ratio));
 
-  const src = URL.createObjectURL(file);
-  try {
-    const img = new Image();
-    img.src = src;
-    await new Promise<void>((resolve, reject) => {
-      img.onload = () => resolve();
-      img.onerror = () => reject(new Error("Failed to decode image."));
-    });
-
-    const canvas = document.createElement("canvas");
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      throw new Error("Canvas is unavailable.");
-    }
-    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, "image/png", 0.92),
-    );
-    if (!blob) {
-      throw new Error("Failed to prepare image.");
-    }
-    return { blob, scaled: true };
-  } finally {
-    URL.revokeObjectURL(src);
+  const canvas = document.createElement("canvas");
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    releaseImageSource(source);
+    throw new Error("Canvas is unavailable.");
   }
+  ctx.drawImage(source, 0, 0, targetWidth, targetHeight);
+  releaseImageSource(source);
+
+  const blob = await new Promise<Blob | null>((resolve) =>
+    canvas.toBlob(resolve, "image/jpeg", 0.92),
+  );
+  if (!blob) {
+    throw new Error("Failed to prepare image.");
+  }
+
+  return { blob, scaled, width: targetWidth, height: targetHeight };
 }
 
-async function runBackgroundRemovalWithFallback(
-  inputBlob: Blob,
+function parseApiErrorPayload(data: unknown): string | null {
+  if (!data) return null;
+  if (typeof data === "string") {
+    try {
+      const parsed = JSON.parse(data) as { error?: string };
+      return parsed.error || null;
+    } catch {
+      return data;
+    }
+  }
+  if (typeof data === "object" && data !== null && "error" in data) {
+    const err = (data as { error?: unknown }).error;
+    return typeof err === "string" ? err : null;
+  }
+  return null;
+}
+
+async function parseApiErrorBlob(blob: Blob): Promise<string> {
+  try {
+    const text = await blob.text();
+    return parseApiErrorPayload(text) || "Background removal failed.";
+  } catch {
+    // ignore
+  }
+  return "Background removal failed.";
+}
+
+async function removeBackgroundViaApi(
+  file: File,
+  preparedBlob: Blob,
   onProgress?: (percent: number) => void,
 ): Promise<Blob> {
-  let lastError: unknown = null;
-  for (const publicPath of BG_REMOVER_PUBLIC_PATHS) {
-    try {
-      const config = {
-        fetchArgs: { mode: "cors" as RequestMode },
-        progress: (_key: string, current: number, total: number) => {
-          if (total > 0 && onProgress) {
-            onProgress(Math.min(92, Math.round((current / total) * 88) + 5));
-          }
-        },
-        ...(publicPath ? { publicPath } : {}),
-      };
-      return await removeBackground(inputBlob, config);
-    } catch (err) {
-      lastError = err;
-    }
-  }
-  throw lastError instanceof Error
-    ? new Error(
-        `${lastError.message}. Unable to download background-removal assets from CDN. Please check your internet/firewall and try again.`,
-      )
-    : new Error("Unable to download background-removal assets from CDN.");
-}
+  const formData = new FormData();
+  const uploadName = (file.name || "image.jpg").replace(/\.[^.]+$/i, ".jpg");
+  formData.append("image", preparedBlob, uploadName);
 
-function colorDistanceSq(a: [number, number, number], b: [number, number, number]): number {
-  const dr = a[0] - b[0];
-  const dg = a[1] - b[1];
-  const db = a[2] - b[2];
-  return dr * dr + dg * dg + db * db;
-}
-
-async function removeBackgroundOffline(inputBlob: Blob): Promise<Blob> {
-  const src = URL.createObjectURL(inputBlob);
   try {
-    const img = new Image();
-    img.src = src;
-    await new Promise<void>((resolve, reject) => {
-      img.onload = () => resolve();
-      img.onerror = () => reject(new Error("Failed to decode image for offline fallback."));
+    const response = await axios.post("/api/remove-background", formData, {
+      responseType: "blob",
+      headers: { Accept: "image/png" },
+      onUploadProgress: (event) => {
+        if (!onProgress || !event.total) return;
+        const pct = Math.round((event.loaded / event.total) * 55) + 15;
+        onProgress(Math.min(88, pct));
+      },
     });
 
-    const canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas is unavailable.");
-
-    ctx.drawImage(img, 0, 0);
-    const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const { data, width, height } = frame;
-
-    const corner = (x: number, y: number): [number, number, number] => {
-      const i = (y * width + x) * 4;
-      return [data[i], data[i + 1], data[i + 2]];
-    };
-
-    // Estimate background from image corners.
-    const c1 = corner(0, 0);
-    const c2 = corner(width - 1, 0);
-    const c3 = corner(0, height - 1);
-    const c4 = corner(width - 1, height - 1);
-    const bg: [number, number, number] = [
-      Math.round((c1[0] + c2[0] + c3[0] + c4[0]) / 4),
-      Math.round((c1[1] + c2[1] + c3[1] + c4[1]) / 4),
-      Math.round((c1[2] + c2[2] + c3[2] + c4[2]) / 4),
-    ];
-
-    const visited = new Uint8Array(width * height);
-    const queue = new Uint32Array(width * height);
-    let qHead = 0;
-    let qTail = 0;
-
-    const thresholdSq = 42 * 42;
-    const softThresholdSq = 62 * 62;
-
-    const enqueue = (x: number, y: number) => {
-      if (x < 0 || y < 0 || x >= width || y >= height) return;
-      const idx = y * width + x;
-      if (visited[idx]) return;
-      const di = idx * 4;
-      const distSq = colorDistanceSq(
-        [data[di], data[di + 1], data[di + 2]],
-        bg,
-      );
-      if (distSq > softThresholdSq) return;
-      visited[idx] = 1;
-      queue[qTail++] = idx;
-    };
-
-    // Seed flood-fill from borders.
-    for (let x = 0; x < width; x++) {
-      enqueue(x, 0);
-      enqueue(x, height - 1);
+    const data = response.data as Blob;
+    if (data.type?.includes("json")) {
+      throw new Error(await parseApiErrorBlob(data));
     }
-    for (let y = 1; y < height - 1; y++) {
-      enqueue(0, y);
-      enqueue(width - 1, y);
-    }
-
-    while (qHead < qTail) {
-      const idx = queue[qHead++];
-      const x = idx % width;
-      const y = (idx / width) | 0;
-      const di = idx * 4;
-      const distSq = colorDistanceSq(
-        [data[di], data[di + 1], data[di + 2]],
-        bg,
-      );
-
-      // Fully remove confident background pixels, soften uncertain edge pixels.
-      if (distSq <= thresholdSq) {
-        data[di + 3] = 0;
-      } else {
-        const ratio = Math.min(1, (distSq - thresholdSq) / Math.max(1, softThresholdSq - thresholdSq));
-        data[di + 3] = Math.max(0, Math.round(255 * ratio));
+    onProgress?.(95);
+    return data;
+  } catch (err) {
+    if (isAxiosError(err) && err.response) {
+      const fromPayload = parseApiErrorPayload(err.response.data);
+      if (fromPayload) throw new Error(fromPayload);
+      if (err.response.data instanceof Blob) {
+        throw new Error(await parseApiErrorBlob(err.response.data));
       }
-
-      enqueue(x - 1, y);
-      enqueue(x + 1, y);
-      enqueue(x, y - 1);
-      enqueue(x, y + 1);
     }
-
-    ctx.putImageData(frame, 0, 0);
-    const out = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.92));
-    if (!out) throw new Error("Offline background-removal fallback failed.");
-    return out;
-  } finally {
-    URL.revokeObjectURL(src);
+    if (err instanceof Error) throw err;
+    throw new Error("Background removal failed.");
   }
 }
 
@@ -600,25 +547,25 @@ export function useToolClientEngine(slug: string) {
             break;
           }
           const file = files[0];
-          const { blob: preparedBlob, scaled } = await downscaleForBackgroundRemoval(file);
-          let blob: Blob;
-          let usedOfflineFallback = false;
-          try {
-            blob = await runBackgroundRemovalWithFallback(preparedBlob, setProcessProgress);
-          } catch (networkErr) {
-            blob = await removeBackgroundOffline(preparedBlob);
-            usedOfflineFallback = true;
-            console.warn("AI background removal unavailable, used offline fallback:", networkErr);
+          const validation = validateImageUpload(file);
+          if (!validation.ok) {
+            setOutput(`Error: ${validation.error}`);
+            break;
           }
+          setProcessProgress(8);
+          const { blob: preparedBlob, scaled, width, height } =
+            await prepareImageForBackgroundRemoval(file);
+          const blob = await removeBackgroundViaApi(file, preparedBlob, setProcessProgress);
           setResultBlob(blob);
           const speedNote = scaled
             ? `\nOptimized input to max ${BG_REMOVER_MAX_DIMENSION}px for faster processing.`
             : "";
-          const fallbackNote = usedOfflineFallback
-            ? "\nUsed offline fallback mode due to model download/network issue."
-            : "";
+          const sizeHint =
+            Math.min(width, height) < RECOMMENDED_MIN_DIMENSION_PX
+              ? `\nTip: Larger images (>${RECOMMENDED_MIN_DIMENSION_PX}px on the short side) usually give better cutouts.`
+              : "";
           setOutput(
-            `Background removed for ${file.name}\nOutput size: ${(blob.size / 1024).toFixed(1)} KB${speedNote}${fallbackNote}`,
+            `Background removed for ${file.name}\nOutput size: ${(blob.size / 1024).toFixed(1)} KB${speedNote}${sizeHint}\nProcessed via remove.bg (image sent securely to our server, not stored).`,
           );
           break;
         }
@@ -750,7 +697,7 @@ export function useToolClientEngine(slug: string) {
             (await mergedPdf.copyPages(pdf, pdf.getPageIndices())).forEach((page) => mergedPdf.addPage(page));
           }
           const mergedBytes = await mergedPdf.save();
-          setResultBlob(new Blob([mergedBytes], { type: "application/pdf" }));
+          setResultBlob(new Blob([mergedBytes as BlobPart], { type: "application/pdf" }));
           setOutput(
             `Merged ${files.length} PDF files into a single document (${(mergedBytes.byteLength / 1024).toFixed(1)} KB).`,
           );
@@ -783,7 +730,7 @@ export function useToolClientEngine(slug: string) {
           const outPdf = await PDFDocument.create();
           (await outPdf.copyPages(pdf, [...pages])).forEach((page) => outPdf.addPage(page));
           const bytes = await outPdf.save();
-          setResultBlob(new Blob([bytes], { type: "application/pdf" }));
+          setResultBlob(new Blob([bytes as BlobPart], { type: "application/pdf" }));
           setOutput(`Created a new PDF containing ${pages.size} page(s) from ${file.name}.`);
           break;
         }

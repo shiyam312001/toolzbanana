@@ -663,7 +663,7 @@ function UploadZone({
           Click to browse
         </span>{" "}
         or drag &amp; drop
-        {isBgRemover ? " · Runs locally · Max 20 MB" : " · Max 20 MB"}
+        {isBgRemover ? " · JPEG, PNG, WEBP · Max 10 MB" : " · Max 20 MB"}
       </div>
 
       {files.length > 0 && (
@@ -1203,7 +1203,7 @@ export function ToolClient({
                         boxShadow: "0 0 0 4px rgba(232,82,26,0.12)",
                       }}
                     />
-                    Runs locally
+                    Secure API processing
                   </span>
                 </div>
                 {isLoading && <ProgressBar progress={processProgress} />}

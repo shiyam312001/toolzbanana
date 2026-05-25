@@ -1,29 +1,24 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { AdBanner } from "../components/common/AdBanner";
+
 /**
- * Reusable ad placeholder block.
+ * Legacy ad wrapper — same as AdBanner; hidden off homepage via display:none.
  */
-export function AdBlock({
-  size = "728x90",
-  className = "",
-  title = "Advertisement",
-}) {
-  const dims = {
-    "728x90": "w-full max-w-[728px] h-[90px]",
-    "300x250": "w-full max-w-[300px] h-[250px]",
-    "300x600": "w-full max-w-[300px] h-[600px]",
-  };
-  const sizeClass = dims[size] || dims["728x90"];
+export function AdBlock({ className = "", size: _size = "728x90" }) {
+  void _size;
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   return (
-    <div className={`mx-auto ${sizeClass} ${className}`.trim()}>
-      <div className="ds-adblock h-full w-full p-3">
-        <div>
-          <span className="ds-adblock-label">{title}</span>
-          <div className="text-sm font-semibold text-ds-text-secondary">
-            Ad Space
-          </div>
-          <div className="mt-1 text-xs">{size}</div>
-        </div>
-      </div>
+    <div
+      className={className}
+      style={isHome ? undefined : { display: "none" }}
+      aria-hidden={!isHome}
+      hidden={!isHome}
+    >
+      <AdBanner />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
+import { AdBanner, AdPlacement, hasAdSenseSlot } from "../components/common";
 import { TOOL_META } from "../tools/tool-meta";
-import { AdBanner } from "../components/common";
 
 /**
  * Right rail for tool pages — matches screenshot: ad blocks + "How to Use" + "Features".
@@ -28,14 +28,14 @@ export function OmniSidebar({
   return (
     <aside className="w-full lg:w-[360px] xl:w-[380px] min-w-0">
       <div className="lg:sticky lg:top-5 space-y-4">
-        
-
-        <div className="rounded-2xl border border-amber-200/60 bg-white  dark:border-amber-400/20 shadow-sm p-3">
-          <p className="text-[0.65rem] uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500 font-bold px-1 mb-2">
-            Advertisement
-          </p>
-          <AdBanner size="300x600" />
-        </div>
+        {hasAdSenseSlot() ? (
+          <AdPlacement className="rounded-2xl border border-amber-200/60 bg-white dark:border-amber-400/20 shadow-sm p-3">
+            <p className="text-[0.65rem] uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500 font-bold px-1 mb-2">
+              Advertisement
+            </p>
+            <AdBanner />
+          </AdPlacement>
+        ) : null}
 
         <section className="rounded-2xl border border-amber-200/60 bg-white  dark:border-amber-400/20 shadow-sm overflow-hidden">
           <div className="px-4 py-3 border-b border-amber-200/60 dark:border-amber-400/15 bg-amber-50/40 dark:bg-amber-500/5">

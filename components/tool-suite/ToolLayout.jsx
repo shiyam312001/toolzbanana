@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AdBanner } from "../components/common";
+import { AdBanner, AdPlacement } from "../components/common";
 import { OmniSidebar } from "./OmniSidebar";
 
 /** Main canvas: fluid padding, safe areas, no horizontal overflow — all breakpoints */
@@ -73,9 +73,9 @@ export function ToolLayout({
   const toolPageBody = (
     <div className={pageWrapClass}>
       {showAds ? (
-        <div className="mb-5 sm:mb-6">
+        <AdPlacement className="mb-5 sm:mb-6">
           <AdBanner />
-        </div>
+        </AdPlacement>
       ) : null}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_380px] gap-5 lg:gap-7 items-start">
         <section className="min-w-0">{children}</section>

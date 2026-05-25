@@ -150,7 +150,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* Google AdSense */}
+        {/* Google AdSense (units hidden off homepage via AdBanner) */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2466646777584490"

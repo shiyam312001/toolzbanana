@@ -371,6 +371,13 @@ const EDITORIAL = {
     pageTitle: "About the background remover",
     sections: [
       {
+        h2: "How processing works",
+        paragraphs: [
+          "When you run this tool, your image is uploaded over HTTPS to ToolzBanana and forwarded to the remove.bg API for AI background removal. We do not store your file after the PNG result is returned.",
+          "Supported uploads are JPEG, PNG, and WEBP up to 10 MB. Large images may be downscaled on your device first to improve speed and stay within API limits.",
+        ],
+      },
+      {
         h2: "Subject separation for creatives",
         paragraphs: [
           "Removing backgrounds is a staple for product photos, marketing collages, and presentation decks. Automated models work best on clear foregrounds with contrast against the backdrop.",

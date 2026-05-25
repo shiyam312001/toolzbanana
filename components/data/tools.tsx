@@ -106,7 +106,7 @@ export const tools = [
   {
     id: 'background-remover',
     name: 'Background Remover',
-    description: 'Remove background from images automatically',
+    description: 'Remove image backgrounds with AI (JPEG, PNG, WEBP up to 10 MB)',
     category: 'image',
     icon: Wand2,
     trending: true,

@@ -1,6 +1,15 @@
 import Link from "next/link";
 
-export function ToolCard({ id, name, description, icon: Icon, category, trending, usageCount, isAd }) {
+export function ToolCard({
+  id,
+  name,
+  description,
+  icon: Icon,
+  category,
+  trending = false,
+  usageCount = '',
+  isAd = false,
+}) {
   return (
     <Link
       href={`/tools/${id}`}

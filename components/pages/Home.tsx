@@ -19,9 +19,9 @@ const homeFaqs = [
       "Most tools run directly in your browser for speed and privacy. Some flows may use server processing when required by the tool.",
   },
   {
-    question: "Why can background remover be slow first time?",
+    question: "How does the background remover handle my images?",
     answer:
-      "The first run may need model assets and warmup time. Later runs are faster after caching.",
+      "Uploads are sent over HTTPS to our server, processed with the remove.bg API, and returned as a PNG. We do not store your files after processing.",
   },
   {
     question: "Can I use tools without account?",

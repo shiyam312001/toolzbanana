@@ -63,12 +63,12 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/terms-of-service" className="text-gray-600 hover:text-yellow-600 transition-colors">
-                  Terms of Service
+                  Terms of Use
                 </Link>
               </li>
               <li>
-                <Link href="/terms-and-conditions" className="text-gray-600 hover:text-yellow-600 transition-colors">
-                  Terms and Conditions
+                <Link href="/cookie-policy" className="text-gray-600 hover:text-yellow-600 transition-colors">
+                  Cookie Policy
                 </Link>
               </li>
               <li>

@@ -4,7 +4,7 @@ export function Input({
   value,
   onChange,
   className = '',
-  icon: Icon,
+  icon: Icon = undefined,
   ...props
 }) {
   return (

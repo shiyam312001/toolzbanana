@@ -1,5 +1,25 @@
-export function Button({ children, variant = 'primary', size = 'md', className = '', onClick, type = 'button', ...props }) {
-  const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+
+type ButtonProps = {
+  children: ReactNode;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
+  type?: 'button' | 'submit' | 'reset';
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'children' | 'className'>;
+
+export function Button({
+  children,
+  variant = 'primary',
+  size = 'md',
+  className = '',
+  onClick,
+  type = 'button',
+  ...props
+}: ButtonProps) {
+  const baseStyles =
+    'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
     primary: 'bg-[#FFC107] hover:bg-[#FFD54F] text-[#101828] shadow-lg hover:shadow-xl',

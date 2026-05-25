@@ -1,4 +1,4 @@
-export { AdBanner } from './AdBanner';
+export { AdBanner, AdPlacement, hasAdSenseSlot } from './AdBanner';
 export { SEO } from './SEO';
 export { ToolCard } from './ToolCard';
 export { CategoryCard } from './CategoryCard';

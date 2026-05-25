@@ -1,8 +1,8 @@
 "use client";
 
 import { SEO } from '../components/common/SEO';
+import { AdBanner, AdPlacement } from '../components/common/AdBanner';
 import { CategoriesGrid } from '../components/common/CategoriesGrid';
-import { AdBanner } from '../components/common/AdBanner';
 import { categories } from '../data/tools';
 
 export function Categories() {
@@ -44,9 +44,9 @@ export function Categories() {
         </div>
       </section>
 
-      <div className="px-4 py-8">
+      <AdPlacement className="px-4 py-8">
         <AdBanner />
-      </div>
+      </AdPlacement>
     </div>
   );
 }

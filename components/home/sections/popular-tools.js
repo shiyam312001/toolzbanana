@@ -28,7 +28,7 @@ const popularTools = [
   },
   {
     name: "Background Remover",
-    description: "Remove background from images automatically",
+    description: "Remove backgrounds with AI via remove.bg (secure API processing)",
     category: "Image",
     users: "12.9k",
     href: "/tools/background-remover",

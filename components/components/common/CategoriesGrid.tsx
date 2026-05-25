@@ -1,6 +1,6 @@
 import { CategoryCard } from './CategoryCard';
 
-export function CategoriesGrid({ categories = [], title, description }) {
+export function CategoriesGrid({ categories = [], title = undefined, description = undefined }) {
   return (
     <section id="categories" className="py-16 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">

@@ -55,7 +55,7 @@ export function OmniImageTool({ slug, tool, engine }) {
 
   const originalLabel = files[0]
     ? `Original: ${formatMb(files[0].size)}`
-    : "Original: 4.2 MB";
+    : "Upload an image to begin";
 
   const primaryLabels = {
     "image-compressor": "Compress & Download",
@@ -123,8 +123,10 @@ export function OmniImageTool({ slug, tool, engine }) {
   const extraBg = (
     <div className="space-y-4 min-h-[120px] flex flex-col justify-center">
       <p className="text-sm text-on-surface leading-relaxed">
-        Background removal runs <strong className="text-primary">locally</strong> in your browser.
-        For best results, use a clear subject and simple background.
+        Your image is sent securely to our server and processed with the{" "}
+        <strong className="text-primary">remove.bg</strong> API. We do not store uploads.
+        Works best with a clear person, product, or object on a contrasting background (JPEG, PNG,
+        or WEBP, max 10 MB). Landscapes, patterns, or already-cut-out PNGs may fail.
       </p>
     </div>
   );

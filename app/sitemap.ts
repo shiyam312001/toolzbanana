@@ -19,6 +19,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: toAbsolute("/blog"), lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: toAbsolute("/about"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: toAbsolute("/contact-us"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: toAbsolute("/privacy-policy"), lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: toAbsolute("/terms-of-service"), lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: toAbsolute("/cookie-policy"), lastModified: now, changeFrequency: "monthly", priority: 0.5 },
   ];
 
   const toolHubPages: MetadataRoute.Sitemap = TOOL_HUB_PATHS.map((path) => ({

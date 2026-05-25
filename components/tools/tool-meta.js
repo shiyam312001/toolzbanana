@@ -167,7 +167,7 @@ export const TOOL_META = {
     category: "Image",
     icon: "✂",
     description:
-      "Remove image backgrounds in your browser. Runs locally — your images never leave your device.",
+      "Remove image backgrounds with AI. Upload JPEG, PNG, or WEBP (up to 10 MB) and download a transparent PNG.",
   },
   "resize-image": {
     title: "Resize Image",
