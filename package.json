@@ -32,7 +32,6 @@
     "prisma": "^7.4.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-json-view": "^1.21.3",
     "sql-formatter": "^15.7.2",
     "tailwind-merge": "^3.5.0",
     "terser": "^5.46.0"
