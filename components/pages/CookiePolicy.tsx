@@ -123,7 +123,7 @@ export function CookiePolicy() {
             <p>
               Cookie names and lifespans may change at Google's discretion. For the most current list
               visit{" "}
-              
+              <a
                 href="https://policies.google.com/technologies/cookies"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -160,7 +160,7 @@ export function CookiePolicy() {
             <ul>
               <li>
                 Adjust Google ad personalisation at{" "}
-                
+                <a
                   href="https://adssettings.google.com"
                   target="_blank"
                   rel="noopener noreferrer"
