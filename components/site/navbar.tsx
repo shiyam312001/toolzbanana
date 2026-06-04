@@ -23,6 +23,8 @@ const NAV_LINKS = [
     match: (p: string) => p.startsWith("/blog"),
   },
   { href: "/about", label: "About", match: (p: string) => p === "/about" },
+  { href: "/contact-us", label: "Contact", match: (p: string) => p === "/contact-us" || p === "/contact" },
+  { href: "/privacy-policy", label: "Privacy", match: (p: string) => p === "/privacy-policy" },
 ];
 
 export function Navbar() {

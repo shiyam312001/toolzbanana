@@ -116,8 +116,43 @@ export function PrivacyPolicyBody() {
       <p>
         We may display advertisements through third-party programmes such as <strong>Google AdSense</strong>. Google and
         other ad partners may use cookies and similar technologies to serve and measure ads, including interest-based
-        advertising. We do not control which specific ads are shown. You can manage personalized ads through Google&apos;s Ads
-        Settings, the NAI opt-out tool, or Your Online Choices (EU/EEA). See our Cookie Policy for more information.
+        advertising based on your prior visits to this website or other websites. We do not control which specific ads
+        are shown.
+      </p>
+      <p>
+        Third-party vendors, including Google, use cookies to serve ads based on a user&apos;s prior visits to your
+        website or other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to
+        your users based on their visit to your sites and/or other sites on the Internet.
+      </p>
+      <p>
+        You can manage personalized ads through{" "}
+        <a
+          href="https://www.google.com/settings/ads"
+          className="text-yellow-700 hover:underline"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Google Ads Settings
+        </a>
+        , read how Google uses data in its{" "}
+        <a
+          href="https://policies.google.com/privacy"
+          className="text-yellow-700 hover:underline"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Privacy Policy
+        </a>
+        , or opt out of personalized advertising via the{" "}
+        <a
+          href="https://optout.aboutads.info/"
+          className="text-yellow-700 hover:underline"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Digital Advertising Alliance opt-out page
+        </a>
+        . See our Cookie Policy for more information.
       </p>
 
       <h2>7. Data retention</h2>

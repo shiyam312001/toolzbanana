@@ -36,6 +36,17 @@ export function About() {
             </p>
 
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              ToolzBanana is operated by an independent team focused on practical,
+              browser-based utilities. We publish under the ToolzBanana brand and
+              maintain editorial standards so every tool page includes original
+              guidance—not just a bare widget. For legal correspondence, see our{" "}
+              <Link href="/contact-us" className="text-yellow-700 font-semibold hover:underline">
+                contact page
+              </Link>
+              .
+            </p>
+
+            <p className="text-gray-600 text-lg leading-relaxed mb-6">
               Our mission is to pair fast tools with honest documentation. That is
               why every tool route ships with a long editorial article that explains
               how to use the feature safely, what stays local in your browser, and

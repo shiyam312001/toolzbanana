@@ -10,7 +10,7 @@ export function Categories() {
     <div className="min-h-screen">
       <SEO
         title="Categories"
-        description="Browse our tool categories: PDF, Image, Text, Developer, Calculator, and Security tools."
+        description="Browse ToolzBanana categories: developer utilities, image tools, and PDF workflows—each with in-depth guides."
       />
 
       <section className="bg-white border-b border-gray-200 py-12 px-4">
@@ -18,8 +18,15 @@ export function Categories() {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Tool Categories
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 mb-4">
             Explore our tools organized by category
+          </p>
+          <p className="text-base text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            ToolzBanana groups {categories.length} core categories—developer data,
+            image processing, and PDF document workflows—so you can move from one
+            related task to the next without hunting through unrelated utilities.
+            Every category links to dedicated tool pages with long-form guidance
+            beneath the interactive workspace.
           </p>
         </div>
       </section>
@@ -44,8 +51,8 @@ export function Categories() {
         </div>
       </section>
 
-      <AdPlacement className="px-4 py-8">
-        <AdBanner />
+      <AdPlacement>
+        <AdBanner lazy />
       </AdPlacement>
     </div>
   );

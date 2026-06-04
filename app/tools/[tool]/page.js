@@ -7,6 +7,7 @@ import {
 import { getToolEditorialSummary } from "../../../components/tools/tool-editorial";
 import ToolPageClient from "./ToolPageClient";
 import { SITE_URL } from "../../../lib/site-config";
+import { permanentRedirect } from "next/navigation";
 
 const HUB_METADATA = {
   "Code & Data": {
@@ -115,6 +116,12 @@ export default async function ToolPage({ params }) {
   const p = await params;
   const raw = typeof p?.tool === "string" ? p.tool : "";
   const normalized = raw || "json-formatter";
+
+  const lowered = normalized.toLowerCase();
+  if (raw !== lowered && (lowered in TOOL_META || isToolHubSegment(lowered))) {
+    permanentRedirect(`/tools/${lowered}`);
+  }
+
   const toolSlug = resolveToolPageSlug(normalized);
   const tool = toolSlug && TOOL_META[toolSlug] ? TOOL_META[toolSlug] : null;
   const canonical = tool ? `${SITE_URL}/tools/${toolSlug}` : `${SITE_URL}/tools`;

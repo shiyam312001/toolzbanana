@@ -2,6 +2,7 @@
 
 import { getOmniShellForSlug } from "../tools/tool-meta";
 import { ToolEditorialSection } from "../tools/ToolEditorialSection";
+import { ToolPageAd } from "../components/common/ToolPageAd";
 import { OmniCodeTool } from "./OmniCodeTool";
 import { OmniImageTool } from "./OmniImageTool";
 import { OmniPdfTool } from "./OmniPdfTool";
@@ -22,6 +23,7 @@ export function OmniToolDispatcher({ slug, tool, engine }) {
     <>
       {inner}
       <ToolEditorialSection slug={slug} variant="omni" />
+      <ToolPageAd />
     </>
   );
 }

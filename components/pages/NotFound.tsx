@@ -18,6 +18,7 @@ export function NotFound() {
         </h2>
         <p className="text-gray-600 mb-8 max-w-md mx-auto">
           Oops! The page you&apos;re looking for doesn&apos;t exist. It might have been moved or deleted.
+          There are no advertisements on this page. Use the links below to return to published content.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

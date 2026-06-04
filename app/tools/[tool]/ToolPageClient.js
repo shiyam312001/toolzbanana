@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ToolClient } from "../../../components/tool-client";
 import { ToolHub } from "../../../components/tool-suite/ToolHub";
 import { ToolLayout } from "../../../components/tool-suite/ToolLayout";
+import { ToolBreadcrumbs } from "../../../components/tools/ToolBreadcrumbs";
 import {
   CATEGORY_TO_HUB_KEY,
   TOOL_META,
@@ -115,7 +116,27 @@ export default function ToolPageClient({ rawSegment }) {
         activeHubKey={activeHubKey}
         sidebarHeader={getSidebarHeader(variant)}
       >
-        <h1 className="sr-only">{tool.title}</h1>
+        <ToolBreadcrumbs category={tool.category} toolTitle={tool.title} />
+        <header className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-headline text-on-surface">
+            {tool.title}
+          </h1>
+          <p className="mt-2 text-sm sm:text-base text-on-surface-variant max-w-3xl leading-relaxed">
+            {tool.description}
+          </p>
+          <p className="mt-3 text-sm sm:text-base text-on-surface-variant max-w-3xl leading-relaxed">
+            Use the workspace below to run {tool.title.toLowerCase()} in your browser.
+            Paste or upload your input, click the primary action button, then copy or
+            download the result when processing completes.
+          </p>
+          <p className="mt-3 text-sm sm:text-base text-on-surface-variant max-w-3xl leading-relaxed">
+            {tool.category === "Code & Data"
+              ? "Developers, QA engineers, and technical writers use this utility during API debugging, log review, and documentation workflows."
+              : tool.category === "Image"
+                ? "Designers, marketers, and content creators use this utility when preparing assets for websites, social posts, and presentations."
+                : "Administrators, students, and office workers use this utility when assembling document packets, splitting chapters, or exporting pages."}
+          </p>
+        </header>
         <ToolClient layout="omni" slug={slug} tool={tool} />
       </ToolLayout>
     );

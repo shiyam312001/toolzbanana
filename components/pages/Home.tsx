@@ -7,7 +7,7 @@ import { HeroSection } from '../components/common/HeroSection';
 import { FeaturesSection } from '../components/common/FeaturesSection';
 import { CategoriesGrid } from '../components/common/CategoriesGrid';
 import { HowItWorksSection } from '../components/common/HowItWorksSection';
-import { AdBanner } from '../components/common/AdBanner';
+import { AdBanner, AdPlacement } from '../components/common/AdBanner';
 import { ToolCard } from '../components/common/ToolCard';
 import { categories, popularTools, tools } from '../data/tools';
 import { useRecentTools } from '../hooks/useRecentTools';
@@ -46,7 +46,7 @@ export function Home() {
     <div className="min-h-screen">
       <SEO
         title="Home"
-        description="60+ free online tools for PDF, Image, Text, Developer tools, Calculators, and Security. Compress, convert, calculate & simplify your daily tasks."
+        description="Free browser-based tools for developers and creators—JSON, JWT, PDF, and image workflows with guides on every page."
       />
 
       <HeroSection categories={categories} />
@@ -192,7 +192,9 @@ export function Home() {
       </section>
 
       <div className="px-4 py-8">
-        <AdBanner />
+        <AdPlacement>
+          <AdBanner lazy />
+        </AdPlacement>
       </div>
     </div>
   );

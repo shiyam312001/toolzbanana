@@ -2,24 +2,50 @@ import { Suspense } from "react";
 import { AllTools } from "../../components/pages/AllTools";
 import { SITE_URL } from "../../lib/site-config";
 
-export const metadata = {
-  title: "Developer Tools",
-  description:
-    "Explore developer utilities: JSON formatter, JWT decoder, Base64 tools, UUID generator, API tester, regex tester, SQL formatter, and more.",
-  alternates: { canonical: `${SITE_URL}/tools` },
-  openGraph: {
-    title: "Developer Tools · ToolzBanana",
+function hasFilterParams(searchParams) {
+  if (!searchParams) return false;
+  const search = searchParams.search;
+  const category = searchParams.category;
+  const view = searchParams.view;
+  return Boolean(
+    (typeof search === "string" && search.trim()) ||
+      (typeof category === "string" && category.trim()) ||
+      (typeof view === "string" && view.trim() && view !== "all"),
+  );
+}
+
+export async function generateMetadata({ searchParams }) {
+  const sp = await searchParams;
+  const filtered = hasFilterParams(sp);
+
+  const base = {
+    title: "All Tools",
     description:
-      "Explore developer utilities: JSON formatter, JWT decoder, Base64 tools, UUID generator, API tester, regex tester, SQL formatter, and more.",
-    url: `${SITE_URL}/tools`,
-    type: "website",
-  },
-  twitter: {
-    title: "Developer Tools · ToolzBanana",
-    description:
-      "Explore developer utilities: JSON formatter, JWT decoder, Base64 tools, UUID generator, API tester, regex tester, SQL formatter, and more.",
-  },
-};
+      "Browse 20+ free browser-based tools for developers and creators: JSON, JWT, Base64, regex, SQL, image compression, PDF merge, and more.",
+    alternates: { canonical: `${SITE_URL}/tools` },
+    openGraph: {
+      title: "All Tools · ToolzBanana",
+      description:
+        "Browse free browser-based developer, image, and PDF utilities with in-depth guides on every page.",
+      url: `${SITE_URL}/tools`,
+      type: "website",
+    },
+    twitter: {
+      title: "All Tools · ToolzBanana",
+      description:
+        "Browse free browser-based developer, image, and PDF utilities with in-depth guides on every page.",
+    },
+  };
+
+  if (filtered) {
+    return {
+      ...base,
+      robots: { index: false, follow: true },
+    };
+  }
+
+  return base;
+}
 
 export default function ToolsDashboardPage() {
   return (

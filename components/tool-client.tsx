@@ -2,6 +2,11 @@
 
 import { ToolShell } from "./tool-shell";
 import { ToolEditorialSection } from "./tools/ToolEditorialSection";
+import { ToolPageAd } from "./components/common/ToolPageAd";
+import {
+  ToolResultProvider,
+  computeHasToolResult,
+} from "./context/ToolResultContext";
 import { ApiTesterWorkspace } from "./api-tester/ApiTesterWorkspace";
 import { BackgroundRemoverCompare } from "./image-tools/BackgroundRemoverCompare";
 import { OmniToolDispatcher } from "./tool-suite/OmniToolDispatcher";
@@ -865,8 +870,14 @@ export function ToolClient({
   layout?: "legacy" | "omni";
 }) {
   const engine = useToolClientEngine(slug);
+  const hasResult = computeHasToolResult(engine, slug);
+
   if (layout === "omni") {
-    return <OmniToolDispatcher slug={slug} tool={tool} engine={engine} />;
+    return (
+      <ToolResultProvider hasResult={hasResult}>
+        <OmniToolDispatcher slug={slug} tool={tool} engine={engine} />
+      </ToolResultProvider>
+    );
   }
 
   const {
@@ -917,7 +928,7 @@ export function ToolClient({
 
   if (isApiTester) {
     return (
-      <>
+      <ToolResultProvider hasResult={hasResult}>
         <ApiTesterWorkspace
           variant="legacy"
           title={tool.title}
@@ -938,7 +949,8 @@ export function ToolClient({
           onCopy={handleCopy}
         />
         <ToolEditorialSection slug={slug} variant="legacy" />
-      </>
+        <ToolPageAd />
+      </ToolResultProvider>
     );
   }
 
@@ -946,7 +958,7 @@ export function ToolClient({
      Render
   ──────────────────────────────────────────── */
   return (
-    <>
+    <ToolResultProvider hasResult={hasResult}>
     <ToolShell
       title={tool.title}
       description={tool.description}
@@ -1346,8 +1358,9 @@ export function ToolClient({
           </div>
         )}
       </div>
-    </ToolShell>
+      </ToolShell>
       <ToolEditorialSection slug={slug} variant="legacy" />
-    </>
+      <ToolPageAd />
+    </ToolResultProvider>
   );
 }

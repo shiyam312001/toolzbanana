@@ -100,7 +100,7 @@ export function AllTools() {
     <div className="min-h-screen bg-gray-50">
       <SEO
         title="All Tools"
-        description="Browse our complete collection of 60+ free online tools for PDF, images, text, development, calculations, and security."
+        description={`Browse ${tools.length} free browser-based tools for developers and creators: JSON, JWT, PDF, and image utilities with guides on every page.`}
       />
 
       <section className="bg-white border-b border-gray-200 py-12 px-4">
@@ -233,8 +233,8 @@ export function AllTools() {
         </div>
       </section>
 
-      <AdPlacement className="px-4 py-8">
-        <AdBanner />
+      <AdPlacement>
+        <AdBanner lazy />
       </AdPlacement>
     </div>
   );
